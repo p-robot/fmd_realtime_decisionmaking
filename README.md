@@ -48,11 +48,24 @@ python2.7 plot_three_panel_plot.py \
 # Supporting Information figures
 
 
-## Figure S1, S2
+Data for figures S1 and S2 are not shared for confidentiality reasons.  
 
-We can't share data for figures S1 and S2 (so code is omitted for them).  
 
-#### Figure S3
+## Figure S1
+
+![./graphics/fig_s1.png](./graphics/fig_s1.png)
+
+**Fig S1. Number of confirmed case per week (ending Monday) during the 2001 outbreak in the UK.**
+
+
+## Figure S2
+
+![./graphics/fig_s2.png](./graphics/fig_s2.png)
+
+**Fig S2. Number of confirmed cases per week (ending Tuesday) during the 2010 outbreak in Miyazaki.**  
+
+
+## Figure S3
 
 ```bash
 python2.7 plot_params_mean_95CI.py \
@@ -86,15 +99,30 @@ python2.7 plot_risk_measure_individual.py \
 
 ## Figure S5
 
+**Fig S5. Marginal posterior distribution of ψ_1  (multiplicative term for contribution to infectious pressure from cattle) versus log γ_1 (multiplicative factor contributing the infection pressure from infected farms) for the first 6 weeks of the 2001 UK outbreak.**
+
 ## Figure S6
+
+**Fig S6. Marginal distribution of ϕ_2 (exponential term for susceptibility of pigs) versus ζ_2 (multiplicative factor for susceptibility of pigs relative to cattle) for the first six weeks of the Miyazaki outbreak.**
 
 ## Figure S7
 
+**Fig S7. Expected number of undetected infections per county per week in the 2001 UK outbreak, weeks 1-16, as estimated under accrued information (y-axis) and complete information (x-axis).**  Those estimated using ‘accrued information’ only used data available at the week in question whereas those estimated under ‘complete information’ were estimated using all data from the outbreak.  
+
+
 ## Figure S8
+
+**Fig S8. Expected number of undetected infections per county per week in the 2010 Miyazaki outbreak as estimated under accrued (y-axis) and complete information (x-axis).**  Those estimated using ‘accrued information’ only used data available at the week in question whereas those estimated under ‘complete information’ were estimated using all data from the outbreak.  
+
 
 ## Figure S9 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
 
+**Fig S9. Predicted final total culls for weeks 1-12 for several control strategies for the UK 2001 outbreak of foot-and-mouth disease.**  A) Predictions of final total culls at the first 12 weeks throughout the 2001 outbreak in UK under seven control strategies (week 1 represents 26 February 2001). Columns denoted ‘Ac’ (‘accrued’ information) represent those simulations generated using data from the time point in question, columns denoted ‘Co’ (complete information) represent simulations seeded using parameters estimated using all the data from the outbreak.  B) Rankings are calculated from the median of those distributions in (A).  C) Proportion of times each control is chosen as the optimal intervention if draws are taken from distributions in (A).
+
+
 ## Figure S10 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
+
+**Fig S10. Predicted final total culls for weeks 13-28 for several control strategies for the UK 2001 outbreak of foot-and-mouth disease.**  A) Predictions of final total culls at weeks 13-28 throughout the 2001 outbreak in UK under seven control strategies (week 1 represents 26 February 2001). Columns denoted ‘Ac’ (‘accrued’ information) represent those simulations generated using data from the time point in question, columns denoted ‘Co’ (complete information) represent simulations seeded using parameters estimated using all the data from the outbreak.  B) Rankings are calculated from the median of those distributions in (A).  C) Proportion of times each control is chosen as the optimal intervention if draws are taken from distributions in (A).
 
 ## Figure S11 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
 
@@ -107,3 +135,5 @@ python2.7 plot_three_panel_plot.py \
     --weeks 1 2 3 4 5 6 7 8 9 10 11
 ```
 
+
+**Fig. S11: Predicted final total culls for weeks 1-11 for several control strategies for the 2010 outbreak of foot-and-mouth disease in Miyazaki, Japan.**  A) Predictions of final total culls at the first 11 weeks throughout the 2001 outbreak in UK under seven control strategies (week 1 represents 27 April 2010). Columns denoted ‘Ac’ (‘accrued’ information) represent those simulations generated using data from the time point in question, columns denoted ‘Co’ (complete information) represent simulations seeded using parameters estimated using all the data from the outbreak.  B) Rankings are calculated from the median of those distributions in (A).  C) Proportion of times each control is chosen as the optimal intervention if draws are taken from distributions in (A).
