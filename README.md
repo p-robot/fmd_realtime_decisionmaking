@@ -23,6 +23,8 @@ python2.7 plot_three_panel_plot.py \
     --weeks 1 2 3 4 5 28
 ```
 
+![./graphics/fig_2.png](./graphics/fig_2.png)
+
 #### Figure 3
 
 ```bash
