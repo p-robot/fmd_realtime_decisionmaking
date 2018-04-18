@@ -88,6 +88,9 @@ python2.7 plot_risk_measure_individual.py \
 
 ![./graphics/fig_s4.png](./graphics/fig_s4.png)
 
+**Fig S4. Instantaneous risk of onward transmission of foot-and-mouth disease in Miyazaki 2010 in first 5 weeks and the final week.**
+
+
 ## Figure S5
 
 ## Figure S6
