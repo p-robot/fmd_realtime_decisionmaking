@@ -2,10 +2,14 @@
 
 ## Figure 1
 
-**Adjust so it has input arguments**
+Instantaneous risk of onward transmission of foot-and-mouth disease in UK 2001 in first 5 weeks and the final week. Calculated as the infectious pressure from an average-sized infectious farm to an average-sized susceptible farm integrated across both the joint parameter distribution at the time point in question, and from 0 to 20km.  Note that the instantaneous risk of transmission indicates the overall relative risk of transmission, which does not have a direct epidemiological interpretation but provides a direct comparison across weeks.  
 
 ```bash
-python2.7 plot_risk_measure_individual.py
+python2.7 plot_risk_measure_individual.py \
+    --filetype=.png \
+    --country=uk \
+    --outfilename=fig_1 \
+    --weeks 1 2 3 4 5 28
 ```
 
 ![./graphics/fig_1.png](./graphics/fig_1.png)
@@ -66,10 +70,14 @@ $convert -density 300 \
 
 ## Figure S4
 
-**Adjust so it has input arguments**
 
 ```bash
-python2.7 plot_risk_measure_individual.py
+python2.7 plot_risk_measure_individual.py \
+    --filetype=.png \
+    --country=japan \
+    --outfilename=fig_s4 \
+    --weeks 1 2 3 4 5 11
+
 ```
 
 ![./graphics/fig_s4.png](./graphics/fig_s4.png)
