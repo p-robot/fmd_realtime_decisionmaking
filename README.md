@@ -1,9 +1,6 @@
-# fmd_realtime_decisionmaking
+# Main text figures
 
-
-### Main text figures
-
-#### Figure 1
+## Figure 1
 
 **Adjust so it has input arguments**
 
@@ -13,7 +10,7 @@ python2.7 plot_risk_measure_individual.py
 
 ![./graphics/fig_1.png](./graphics/fig_1.png)
 
-#### Figure 2
+## Figure 2
 
 ```bash
 python2.7 plot_three_panel_plot.py \
@@ -26,7 +23,7 @@ python2.7 plot_three_panel_plot.py \
 
 ![./graphics/fig_2.png](./graphics/fig_2.png)
 
-#### Figure 3
+## Figure 3
 
 ```bash
 python2.7 plot_three_panel_plot.py \
@@ -39,10 +36,10 @@ python2.7 plot_three_panel_plot.py \
 
 --- 
 
-### Supporting Information Figures
+# Supporting Information figures
 
 
-#### Figure S1, S2
+## Figure S1, S2
 
 We can't share data for figures S1 and S2 (so code is omitted for them).  
 
@@ -67,7 +64,7 @@ $convert -density 300 \
 ![./graphics/fig_s3.png](./graphics/fig_s3.png)
 
 
-#### Figure S4
+## Figure S4
 
 **Adjust so it has input arguments**
 
@@ -77,20 +74,19 @@ python2.7 plot_risk_measure_individual.py
 
 ![./graphics/fig_s4.png](./graphics/fig_s4.png)
 
-#### Figure S5
+## Figure S5
 
-#### Figure S6
+## Figure S6
 
-#### Figure S7
+## Figure S7
 
-#### Figure S8
+## Figure S8
 
-* Figure S9 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
+## Figure S9 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
 
-* Figure S10 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
+## Figure S10 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
 
-* Figure S11 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
-
+## Figure S11 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
 
 ```bash
 python2.7 plot_three_panel_plot.py \
@@ -100,5 +96,4 @@ python2.7 plot_three_panel_plot.py \
     --randomseed=100 \
     --weeks 1 2 3 4 5 6 7 8 9 10 11
 ```
-
 
