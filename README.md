@@ -11,6 +11,7 @@
 python2.7 plot_risk_measure_individual.py
 ```
 
+![./graphics/fig_1.png](./graphics/fig_1.png)
 
 #### Figure 2
 
@@ -35,6 +36,8 @@ python2.7 plot_three_panel_plot.py \
     --randomseed=100 \
     --weeks 1 2 3 4 5 11
 ```
+
+--- 
 
 ### Supporting Information Figures
 
@@ -65,6 +68,14 @@ $convert -density 300 \
 
 
 #### Figure S4
+
+**Adjust so it has input arguments**
+
+```bash
+python2.7 plot_risk_measure_individual.py
+```
+
+![./graphics/fig_s4.png](./graphics/fig_s4.png)
 
 #### Figure S5
 
