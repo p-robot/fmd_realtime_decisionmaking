@@ -2,8 +2,6 @@
 
 ## Figure 1
 
-Instantaneous risk of onward transmission of foot-and-mouth disease in UK 2001 in first 5 weeks and the final week. Calculated as the infectious pressure from an average-sized infectious farm to an average-sized susceptible farm integrated across both the joint parameter distribution at the time point in question, and from 0 to 20km.  Note that the instantaneous risk of transmission indicates the overall relative risk of transmission, which does not have a direct epidemiological interpretation but provides a direct comparison across weeks.  
-
 ```bash
 python2.7 plot_risk_measure_individual.py \
     --filetype=.png \
@@ -13,6 +11,8 @@ python2.7 plot_risk_measure_individual.py \
 ```
 
 ![./graphics/fig_1.png](./graphics/fig_1.png)
+
+Instantaneous risk of onward transmission of foot-and-mouth disease in UK 2001 in first 5 weeks and the final week. Calculated as the infectious pressure from an average-sized infectious farm to an average-sized susceptible farm integrated across both the joint parameter distribution at the time point in question, and from 0 to 20km.  Note that the instantaneous risk of transmission indicates the overall relative risk of transmission, which does not have a direct epidemiological interpretation but provides a direct comparison across weeks.  
 
 ## Figure 2
 
@@ -27,6 +27,8 @@ python2.7 plot_three_panel_plot.py \
 
 ![./graphics/fig_2.png](./graphics/fig_2.png)
 
+Projections and relative rankings of various control strategies of total animals culled, and estimates of infected but undetected farms, for the first five weeks and the final week of the 2001 foot-and-mouth disease outbreak in UK.  A) Distribution of total animal culls from forward simulations, here shown as kernel density estimates (violin plots), are seeded either using parameter estimates from the end of the outbreak (‘complete’), or at the specific time point (‘accrued’).  B) Rankings of control interventions are according to median projections.  Proportion (C) of times each control was optimal when bootstrap samples are made from distributions in (A).  For all time points see figs S9 and S10.  
+
 ## Figure 3
 
 ```bash
@@ -37,6 +39,9 @@ python2.7 plot_three_panel_plot.py \
     --randomseed=100 \
     --weeks 1 2 3 4 5 11
 ```
+
+Projections and relative rankings of various control strategies of total animals culled, and estimates of infected but undetected farms, for the first five weeks and final week of the 2010 foot-and-mouth disease outbreak in Miyazaki, Japan.  A) Distribution of total animal culls from forward simulations, here shown as kernel density estimates (violin plots), are seeded either using parameter estimates from the end of the outbreak (‘complete’), or at the specific time point (‘accrued’).  B) Rankings of control interventions are according to median projections.  Proportion (C) of times each control was optimal when bootstrap samples are made from distributions in (A).  For all time points see fig S11.  
+
 
 --- 
 
