@@ -72,6 +72,7 @@ $convert -density 300 \
 
 ![./graphics/fig_s3.png](./graphics/fig_s3.png)
 
+**Fig S3. Marginal posterior predictive distribution of 16 parameters in the epidemic model for the first 10 weeks.**  Distributions in red are estimated for the outbreak in Miyazaki blue for parameters the UK.  Parameters shown on the log scale are γ1, ε1, and ε2.  
 
 ## Figure S4
 
