@@ -61,13 +61,6 @@ python2.7 plot_params_mean_95CI.py \
     --figw=9.5 --figh=7 \
     --outputfilename=fig_s3 \
     --ncols=4 --nrows=4
-
-$convert -density 300 \
-    ./graphics/fig_s3.pdf \
-    -resize 2200 \
-    -depth 8 \
-    -compress lzw \
-    -flatten ./graphics/figure_s3.tif
 ```
 
 ![./graphics/fig_s3.png](./graphics/fig_s3.png)
