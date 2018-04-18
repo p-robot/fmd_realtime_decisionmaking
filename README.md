@@ -16,9 +16,9 @@ python2.7 plot_risk_measure_individual.py
 
 ```bash
 python2.7 plot_three_panel_plot.py \
-    --filetype=.eps \
+    --filetype=.png \
     --country=uk \
-    --outfilename=figure_2 \
+    --outfilename=fig_2 \
     --randomseed=100 \
     --weeks 1 2 3 4 5 28
 ```
@@ -27,9 +27,9 @@ python2.7 plot_three_panel_plot.py \
 
 ```bash
 python2.7 plot_three_panel_plot.py \
-    --filetype=.eps \
+    --filetype=.png \
     --country=japan \
-    --outfilename=figure_3 \
+    --outfilename=fig_3 \
     --randomseed=100 \
     --weeks 1 2 3 4 5 11
 ```
@@ -66,7 +66,11 @@ $convert -density 300 \
 
 #### Figure S5
 
+#### Figure S6
 
+#### Figure S7
+
+#### Figure S8
 
 * Figure S9 - adjust the height/width of the output plot in `plot_three_panel_plot.py`
 
