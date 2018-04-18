@@ -47,11 +47,11 @@ python2.7 plot_three_panel_plot.py \
 
 # Supporting Information figures
 
-
-Data for figures S1 and S2 are not shared for confidentiality reasons.  
-
-
 ## Figure S1
+
+```
+Data and code for figure S1 are not shared for confidentiality reasons.  
+```
 
 ![./graphics/fig_s1.png](./graphics/fig_s1.png)
 
@@ -59,6 +59,10 @@ Data for figures S1 and S2 are not shared for confidentiality reasons.
 
 
 ## Figure S2
+
+```
+Data and code for figure S2 are not shared for confidentiality reasons.  
+```
 
 ![./graphics/fig_s2.png](./graphics/fig_s2.png)
 
