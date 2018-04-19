@@ -1,5 +1,16 @@
-Blurb for obtaining the data (to be decided after liaising with journal and running the scripts in this repo to generate the figures.  
+Blurb for obtaining the data (to be decided after liaising with journal and running the scripts in this repo to generate the figures.  The article can be found [here](http://lmgtfy.com/?q=real+time+decision+making+during+emergency+disease+outbreaks).
 
+
+After download, data should be arranged in the following manner:
+```
+fmd_realtime_decisionmaking/
+    |
+    data/
+        /parameters_miyazaki.csv
+        /parameters_uk.csv
+        /simulations_miyazaki.csv
+        /simulations_uk.csv
+```
 
 # Main text figures
 
