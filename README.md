@@ -1,5 +1,8 @@
+# Overview 
+
 Blurb for obtaining the data (to be decided after liaising with journal and running the scripts in this repo to generate the figures.  The article can be found [here](http://lmgtfy.com/?q=real+time+decision+making+during+emergency+disease+outbreaks).
 
+## Data set-up
 
 After download, data should be arranged in the following manner:
 ```
@@ -11,6 +14,11 @@ fmd_realtime_decisionmaking/
         /simulations_miyazaki.csv
         /simulations_uk.csv
 ```
+
+## Generating graphics
+
+Python version 2.7 was used to generate the plots.  The following packages were used: `numpy` (version), `pandas` (version), `matplotlib` (version).  
+
 
 # Main text figures
 
