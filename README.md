@@ -103,9 +103,31 @@ python2.7 plot_risk_measure_individual.py \
 
 ## Figure S5
 
+```bash
+python2.7 plot_scatterplot_params.py \
+    -p1=psi_1 -p2=gamma1 \
+    -w 1 2 3 4 5 6 \
+    -c=uk \
+    -f=".png"\
+    --outfilename="fig_s5"
+```
+
+![./graphics/fig_s5.png](./graphics/fig_s5.png)
+
 **Fig S5. Marginal posterior distribution of ψ_1  (multiplicative term for contribution to infectious pressure from cattle) versus log γ_1 (multiplicative factor contributing the infection pressure from infected farms) for the first 6 weeks of the 2001 UK outbreak.**
 
 ## Figure S6
+
+```bash
+python2.7 plot_scatterplot_params.py \
+    -p1=phi_2 -p2=zeta_2 \
+    -w 1 2 3 4 5 6 \
+    -c=japan \
+    -f=".png" \
+    --outfilename="fig_s6"
+```
+
+![./graphics/fig_s6.png](./graphics/fig_s6.png)
 
 **Fig S6. Marginal distribution of ϕ_2 (exponential term for susceptibility of pigs) versus ζ_2 (multiplicative factor for susceptibility of pigs relative to cattle) for the first six weeks of the Miyazaki outbreak.**
 
