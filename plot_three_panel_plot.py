@@ -32,6 +32,9 @@ Parameters
 --weeks : space delimited list of ints (i.e. "1 2 3")
     The "weeks since outbreak started" to use for plotting
 
+--figw : width of the output figure
+
+--figh : height of the output figure
 
 The resultant figures need to be processed with ImageMagick in order to pass the test for PLOS
 Computational Biology.  Example usage of ImageMagick commands are the following (assuming F2.eps was output by Python and F2.tif is the resultant tif file).  
@@ -96,11 +99,20 @@ if __name__ == "__main__":
     parser.add_argument("--sim_legend", type = bool, 
         help = "Should a legend be plotted for the simulation output", default = True)
     
+    parser.add_argument("--legend_size", type = int, 
+        help = "Size of the legend", default = 9)
+    
     parser.add_argument("--accrued_xtext", type = str, 
         help = "Text on x-axis to denote columns of accrued information", default = "Accr.")
     
     parser.add_argument("--complete_xtext", type = str, 
         help = "Text on x-axis to denote columns of complete information", default = "Comp.")
+    
+    parser.add_argument('--figw', type = float, default = 48/5.5, 
+        help = "Figure output width")
+    
+    parser.add_argument('--figh', type = float, default = 30/5.5, 
+        help = "Figure output height")
     
     args = parser.parse_args()
     
@@ -116,8 +128,8 @@ if __name__ == "__main__":
     weeks = np.asarray(args.weeks); T = len(args.weeks)
     
     # Functions for summarising simulation output and then generating rankings of interventions
-    functions = [np.median] #lambda x: np.percentile(x, 95)], np.median,np.var,()]
-    function_names = ['median']#, 'median', 'var', 'q95']95 perc
+    functions = [np.mean] #lambda x: np.percentile(x, 95)], np.median,np.var,()]
+    function_names = ['mean']#, 'median', 'var', 'q95']95 perc
     
     variables = [args.obj]
     
@@ -303,7 +315,7 @@ if __name__ == "__main__":
                     ind_next = np.digitize([t], weeks_to_plot)[0]
                     ind_curr = np.nan
                 
-                if ind_next == T:
+                if ind_next == len(weeks_to_plot):
                     ind_next = ind_curr
                     
                 if ind_prev < 0:
@@ -313,7 +325,7 @@ if __name__ == "__main__":
                     t_ind_prev = weeks_to_plot[ind_prev]
                 
                 # Find the previous time and next time
-                t_prev = t-1; t_next = t+1
+                t_prev = t - 1; t_next = t + 1
                 t_ind_next = weeks_to_plot[ind_next]
                 
                 date_curr = outbreak_start + pd.to_timedelta(t, unit = 'W')
@@ -451,7 +463,7 @@ if __name__ == "__main__":
                     axes[1, mid_ax].set_yticks([])
                     axes[1, mid_ax].set_yticklabels([])
                     
-                if (t == 1) & (ax_i == 0):
+                if (ax_i == 0):
                     axes[0, ax_i].yaxis.set_ticks_position('left')
                     axes[1, ax_i].yaxis.set_ticks_position('left')
                     for tick in axes[i_v, 0].yaxis.get_major_ticks():
@@ -582,7 +594,7 @@ if __name__ == "__main__":
             
             plt.sca(axes[ax0, ax1])
             legend_all = plt.legend(handles = handles, bbox_to_anchor = (1.1, 1.1), \
-                numpoints = 1, frameon = False, prop = {'size': 9})
+                numpoints = 1, frameon = False, prop = {'size': args.legend_size})
             
             axes[ax0, ax1].add_artist(legend_all)
         
@@ -626,7 +638,7 @@ if __name__ == "__main__":
         fig.subplots_adjust(left = 0.09, bottom = 0.14, \
             right = 0.985, top = 0.95, wspace=0.0, hspace=0.35)
         
-        fig.set_size_inches(48/5.5, 30/5.5)
+        fig.set_size_inches(args.figw, args.figh)#, 48/5.5, 30/5.5)
         
         # Determine the output filename
         if args.outfilename is None:
