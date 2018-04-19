@@ -136,10 +136,22 @@ python2.7 plot_scatterplot_params.py \
 
 ## Figure S7
 
+```
+Data and code for figure S7 are not shared for confidentiality reasons.  
+```
+
+![./graphics/fig_s7.png](./graphics/fig_s7.png)
+
 **Fig S7. Expected number of undetected infections per county per week in the 2001 UK outbreak, weeks 1-16, as estimated under accrued information (y-axis) and complete information (x-axis).**  Those estimated using ‘accrued information’ only used data available at the week in question whereas those estimated under ‘complete information’ were estimated using all data from the outbreak.  
 
 
 ## Figure S8
+
+```
+Data and code for figure S8 are not shared for confidentiality reasons.  
+```
+
+![./graphics/fig_s8.png](./graphics/fig_s8.png)
 
 **Fig S8. Expected number of undetected infections per county per week in the 2010 Miyazaki outbreak as estimated under accrued (y-axis) and complete information (x-axis).**  Those estimated using ‘accrued information’ only used data available at the week in question whereas those estimated under ‘complete information’ were estimated using all data from the outbreak.  
 
@@ -180,7 +192,7 @@ python2.7 plot_three_panel_plot.py \
     --legend_size=8 \
     --accrued_xtext=Ac \
     --complete_xtext=Co \
-    --weeks 13 14 15 16 17 18 19 20 24 25 26 27 28
+    --weeks 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
 ```
 
 ![./graphics/fig_s10.png](./graphics/fig_s10.png)
