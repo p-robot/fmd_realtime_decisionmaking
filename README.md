@@ -62,6 +62,8 @@ python2.7 plot_three_panel_plot.py \
     --weeks 1 2 3 4 5 11
 ```
 
+![./graphics/fig_3.png](./graphics/fig_3.png)
+
 **Fig 3. Projections and relative rankings of various control strategies of total animals culled, and estimates of infected but undetected farms, for the first five weeks and final week of the 2010 foot-and-mouth disease outbreak in Miyazaki, Japan.**  A) Distribution of total animal culls from forward simulations, here shown as kernel density estimates (violin plots), are seeded either using parameter estimates from the end of the outbreak (‘complete’), or at the specific time point (‘accrued’).  B) Rankings of control interventions are according to median projections.  Proportion (C) of times each control was optimal when bootstrap samples are made from distributions in (A).  For all time points see fig S11.  
 
 
