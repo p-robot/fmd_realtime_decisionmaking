@@ -9,6 +9,7 @@ After download, data should be arranged in the following manner:
 fmd_realtime_decisionmaking/
     |
     data/
+        |
         /parameters_miyazaki.csv
         /parameters_uk.csv
         /simulations_miyazaki.csv
@@ -17,7 +18,7 @@ fmd_realtime_decisionmaking/
 
 ## Generating graphics
 
-Python version 2.7 was used to generate the plots.  The following packages were used: `numpy` (version), `pandas` (version), `matplotlib` (version).  
+Python (version 2.7 or 3.6.3) was used to generate the plots.  The following packages were used: `numpy` (version), `pandas` (version), `matplotlib` (version).  
 
 
 # Main text figures
@@ -25,7 +26,7 @@ Python version 2.7 was used to generate the plots.  The following packages were 
 ## Figure 1
 
 ```bash
-python2.7 plot_risk_measure_individual.py \
+python plot_risk_measure_individual.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_1 \
@@ -39,7 +40,7 @@ python2.7 plot_risk_measure_individual.py \
 ## Figure 2
 
 ```bash
-python2.7 plot_three_panel_plot.py \
+python plot_three_panel_plot.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_2 \
@@ -54,7 +55,7 @@ python2.7 plot_three_panel_plot.py \
 ## Figure 3
 
 ```bash
-python2.7 plot_three_panel_plot.py \
+python plot_three_panel_plot.py \
     --filetype=.png \
     --country=japan \
     --outfilename=fig_3 \
@@ -96,7 +97,7 @@ Data and code for figure S2 are not shared for confidentiality reasons.
 ## Figure S3
 
 ```bash
-python2.7 plot_params_mean_95CI.py \
+python plot_params_mean_95CI.py \
     -f=.png \
     -w 1 2 3 4 5 6 7 8 9 10 11 \
     --figw=9.5 --figh=7 \
@@ -112,7 +113,7 @@ python2.7 plot_params_mean_95CI.py \
 
 
 ```bash
-python2.7 plot_risk_measure_individual.py \
+python plot_risk_measure_individual.py \
     --filetype=.png \
     --country=japan \
     --outfilename=fig_s4 \
@@ -128,7 +129,7 @@ python2.7 plot_risk_measure_individual.py \
 ## Figure S5
 
 ```bash
-python2.7 plot_scatterplot_params.py \
+python plot_scatterplot_params.py \
     -p1=psi_1 -p2=gamma1 \
     -w 1 2 3 4 5 6 \
     -c=uk \
@@ -143,7 +144,7 @@ python2.7 plot_scatterplot_params.py \
 ## Figure S6
 
 ```bash
-python2.7 plot_scatterplot_params.py \
+python plot_scatterplot_params.py \
     -p1=phi_2 -p2=zeta_2 \
     -w 1 2 3 4 5 6 \
     -c=japan \
@@ -180,7 +181,7 @@ Data and code for figure S8 are not shared for confidentiality reasons.
 ## Figure S9
 
 ```bash
-python2.7 plot_three_panel_plot.py \
+python plot_three_panel_plot.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_s9 \
@@ -202,7 +203,7 @@ python2.7 plot_three_panel_plot.py \
 ## Figure S10
 
 ```bash
-python2.7 plot_three_panel_plot.py \
+python plot_three_panel_plot.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_s10 \
@@ -223,7 +224,7 @@ python2.7 plot_three_panel_plot.py \
 ## Figure S11
 
 ```bash
-python2.7 plot_three_panel_plot.py \
+python plot_three_panel_plot.py \
     --filetype=.png \
     --country=japan \
     --outfilename=fig_s11 \
