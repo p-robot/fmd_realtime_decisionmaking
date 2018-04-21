@@ -1,0 +1,170 @@
+"""
+Correlation plots between the empirical marginal posterior distributions of two parameters
+
+Parameters that are plotted on the log scale are gamma1, epsilon1, epsilon2.  Parameters that are plotted with y-axis of [0,1] are phi_1 phi_2 psi_1 psi_2.  Otherwise, the limits for the
+y-axis are taken as the limits for the parameter in question across all weeks (including those
+that are not plotted).  
+
+Usage:
+plot_scatterplot_parameters.py --param1=<parameter1> --param2<parameter2> --weeks 1 2 3 4 5 --filetype=<.eps> --outfilename=<output_filename>
+
+
+Parameters
+----------
+param1 : str
+    Parameter 1 of interest (x axis)
+
+param2 : str
+    Parameter 2 of interest (y axis)
+
+weeks : list of int
+    Weeks to plot
+
+country : str ("japan" or "uk")
+    Country from which to draw data
+
+outfilename : str
+    File name to use for output filetype
+"""
+
+import sys, os, argparse
+from os.path import join
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+
+as_zero_to_one = ['phi_1', 'phi_2', 'psi_1', 'psi_2']
+as_logged = ['gamma1', 'epsilon1', 'epsilon2'] #'e1e2'
+
+# Colour defaults
+alpha = 0.9
+colour_japan = "#e31a1c"
+rgba_japan = [0.89, 0.102, 0.11, alpha]
+colour_uk = "#1f78b4"
+rgba_uk = [0.122, 0.471, 0.706, alpha]
+
+color_line = '#2b2b2b'
+
+if __name__ == "__main__":
+    # Process the input argument
+    parser = argparse.ArgumentParser()
+    
+    parser.add_argument("--param1", "-p1", type = str, required = True,
+        help = "Parameter 1 of interest (xaxis)")
+    
+    parser.add_argument("--param2", "-p2", type = str, required = True,
+        help = "Parameter 2 of interest (xaxis)")
+    
+    parser.add_argument('-w','--weeks', nargs = '+', required = True, type = int)
+    
+    parser.add_argument("-c", "--country", type = str, required = True,
+        help = "Country of interest ('uk' or 'japan')")
+    
+    parser.add_argument("-f", "--filetype", type = str, 
+        help = "Filetype to be used for the output plots", default = ".eps")
+    
+    parser.add_argument("-o", "--outfilename", type = str, 
+        help = "Output filename (excluding the filetype suffix)", default = None)
+    
+    args = parser.parse_args()
+    
+    # Import the data
+    if args.country == "uk":
+        
+        full = pd.read_csv(join('.', 'data', 'cleaned_params_uk.csv'))
+        
+        # 'Week 1' in the UK data started on the 19th Feb 2001
+        full['week'] = (full.day - 19)/7.
+        
+        colour = rgba_uk
+        
+    elif args.country == "japan":
+        
+        full = pd.read_csv(join('.', 'data', \
+            'cleaned_params_japan_vaccine_standard16.7.20.csv'))
+        
+        # 'Week 1' in the Miyazaki data started on the 27th April 2010
+        full['week'] = (full.day - 27)/7.
+        
+        colour = rgba_japan
+    
+    full['e1e2'] = full.epsilon1 * full.epsilon2
+    
+    weeks = np.array(args.weeks)
+    T = len(weeks)
+    
+    if args.param1 in as_logged:
+        full[args.param1] = np.log(full[args.param1])
+    
+    if args.param2 in as_logged:
+        full[args.param2] = np.log(full[args.param2])
+    
+    param1_lims = [full[args.param1].min(), full[args.param1].max()]
+    param2_lims = [full[args.param2].min(), full[args.param2].max()]
+    
+    if args.param1 in as_zero_to_one:
+        param1_lims = [0, 1]
+    if args.param2 in as_zero_to_one:
+        param2_lims = [0, 1]
+    
+    fig, ax = plt.subplots(ncols = T, nrows = 1)
+    
+    for axi, t in enumerate(weeks):
+        
+        subset = full[full.week == t]
+        
+        ax[axi].scatter(subset[args.param1], subset[args.param2], 
+            s = 3, lw = 0, c = colour)
+        
+        if axi > 0:
+            ax[axi].set_xticks([])
+            ax[axi].set_xticklabels([])
+            ax[axi].set_yticks([])
+            ax[axi].set_yticklabels([])
+        
+        ax[axi].set_frame_on(False)
+        ax[axi].tick_params(labelsize = 8, length = 0.0)
+        
+        ax[axi].set_xlim(param1_lims)
+        ax[axi].set_ylim(param2_lims)
+        
+        ax[axi].axhline(ax[axi].get_ylim()[0], color = color_line, linewidth = 1.0)
+        ax[axi].axvline(ax[axi].get_xlim()[0], color = color_line, linewidth = 1.0)
+        
+        # Can plot week number using xlabel as follows:
+        #ax[axi].set_xlabel('\n\n'+str(t), fontsize = 12)
+        
+        ax[axi].text(0.5, -0.15, str(t), size = 12, ha = "center", transform = ax[axi].transAxes)
+    
+    # Use 3 ticks for both axes
+    NTICKS = 3
+    ax[0].set_xticks(np.linspace(param1_lims[0], param1_lims[1], NTICKS))
+    ax[0].set_yticks(np.linspace(param2_lims[0], param2_lims[1], NTICKS))
+    
+    if args.param1 in as_logged:
+        ax[0].set_xlabel('log $\\' + args.param1 + '$', fontsize = 14)
+    else:
+        ax[0].set_xlabel('$\\' + args.param1 + '$', fontsize = 14)
+        
+    if args.param2 in as_logged:
+        ax[0].set_ylabel('log $\\' + args.param2 + '$', fontsize = 14)
+    else:
+        ax[0].set_ylabel('$\\' + args.param2 + '$', fontsize = 14)
+    
+    text_props = {'size': 14, 'weight': 'normal'}
+    
+    plt.figtext(0.53, 0.02, 'Week since first confirmed case', \
+        va = 'center', ha = 'center', **text_props)
+    
+    if args.outfilename:
+        filename = args.outfilename
+    else:
+        filename = "_".join([args.param1, args.param2, args.country])
+    
+    # Set the maximum size of the figure for the journal
+    fig.set_size_inches((9.5, 7))
+    
+    fig.subplots_adjust(left = 0.09, bottom = 0.2, \
+        right = 0.985, top = 0.95, wspace=0.05, hspace=0.0)
+    
+    plt.savefig(join('.', 'graphics', filename + args.filetype))
+    plt.close()
