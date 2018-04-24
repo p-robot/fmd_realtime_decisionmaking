@@ -14,19 +14,14 @@ filetype : str
 weeks : list of int
     Weeks of data to plot
 """
+
 import sys, os, argparse
 import pandas as pd, numpy as np, sys
 from os.path import join
 from matplotlib import pyplot as plt
 import matplotlib.patches as mpatches
 
-
-# Plotting defaults
-alpha = 0.4
-colour_japan = "#e31a1c"
-rgba_japan = [0.89, 0.102, 0.11, alpha]
-colour_uk = "#1f78b4"
-rgba_uk = [0.122, 0.471, 0.706, alpha]
+from colours import *
 
 # Functions to use for plotting
 functions = [np.mean, lambda x: x.quantile(0.025), lambda x: x.quantile(0.975)]
@@ -61,9 +56,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    fulluk = pd.read_csv(join('.', 'data', 'cleaned_params_uk.csv'))
-    fullj = pd.read_csv(join('.', 'data', \
-        'cleaned_params_japan_vaccine_standard16.7.20.csv'))
+    fulluk = pd.read_csv(join('.', 'data', 'parameters_uk.csv'))
+    fullj = pd.read_csv(join('.', 'data', 'parameters_japan.csv'))
     
     fullj['e1e2'] = fullj.epsilon1 * fullj.epsilon2
     fulluk['e1e2'] = fulluk.epsilon1 * fulluk.epsilon2
@@ -114,11 +108,16 @@ if __name__ == "__main__":
         for icountry, df in enumerate([fulluk, fullj]):
             if var in df.columns:
                 if icountry == 0:
-                    linestyle_avg = {'linestyle': "-", 'c': colour_uk}
-                    linestyle_ci = {'linestyle': "--", 'c': rgba_uk}
+                    linestyle_avg = {'linestyle': "-", 
+                        'c': colour_dict_country['uk']['chex']}
+                        
+                    linestyle_ci = {'linestyle': "--", \
+                        'c': colour_dict_country['uk']['crgba']}
                 else:
-                    linestyle_avg = {'linestyle': "-", 'c': colour_japan}
-                    linestyle_ci = {'linestyle': "--", 'c': rgba_japan}
+                    linestyle_avg = {'linestyle': "-", \
+                        'c': colour_dict_country['japan']['chex']}
+                    linestyle_ci = {'linestyle': "--", \
+                        'c': colour_dict_country['japan']['crgba']}
                 
                 subdf = df[df.week.isin(times)]
                 
@@ -155,7 +154,6 @@ if __name__ == "__main__":
             axes[axy, axx].xaxis.set_ticks_position('bottom')
             axes[axy, axx].tick_params(labelsize = 8, length = 0.0)
     
-    text_props = {'size': 14, 'weight': 'normal'}
     plt.figtext(0.53, 0.03, 'Week since first confirmed case', \
         va = 'center', ha = 'center', **text_props)
     
