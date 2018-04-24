@@ -32,19 +32,23 @@ from os.path import join
 import numpy as np, pandas as pd
 import matplotlib.pyplot as plt
 
+# Import plotting default colours and styles.  
+from colours import *
+
+def rounddown(x, dp = 2):
+    return np.floor(x*(10**dp))/10**dp
+
+def roundup(x, dp = 2):
+    return np.ceil(x*(10**dp))/10**dp
+
 as_zero_to_one = ['phi_1', 'phi_2', 'psi_1', 'psi_2']
 as_logged = ['gamma1', 'epsilon1', 'epsilon2'] #'e1e2'
 
-# Colour defaults
-alpha = 0.9
-colour_japan = "#e31a1c"
-rgba_japan = [0.89, 0.102, 0.11, alpha]
-colour_uk = "#1f78b4"
-rgba_uk = [0.122, 0.471, 0.706, alpha]
-
-color_line = '#2b2b2b'
+# Use 3 ticks for both axes
+NTICKS = 3
 
 if __name__ == "__main__":
+    
     # Process the input argument
     parser = argparse.ArgumentParser()
     
@@ -70,22 +74,17 @@ if __name__ == "__main__":
     # Import the data
     if args.country == "uk":
         
-        full = pd.read_csv(join('.', 'data', 'cleaned_params_uk.csv'))
+        full = pd.read_csv(join('.', 'data', 'parameters_uk.csv'))
         
         # 'Week 1' in the UK data started on the 19th Feb 2001
         full['week'] = (full.day - 19)/7.
         
-        colour = rgba_uk
-        
     elif args.country == "japan":
         
-        full = pd.read_csv(join('.', 'data', \
-            'cleaned_params_japan_vaccine_standard16.7.20.csv'))
+        full = pd.read_csv(join('.', 'data', 'parameters_japan.csv'))
         
         # 'Week 1' in the Miyazaki data started on the 27th April 2010
         full['week'] = (full.day - 27)/7.
-        
-        colour = rgba_japan
     
     full['e1e2'] = full.epsilon1 * full.epsilon2
     
@@ -98,8 +97,13 @@ if __name__ == "__main__":
     if args.param2 in as_logged:
         full[args.param2] = np.log(full[args.param2])
     
-    param1_lims = [full[args.param1].min(), full[args.param1].max()]
-    param2_lims = [full[args.param2].min(), full[args.param2].max()]
+    param1_lims = [rounddown(full[args.param1].min()), 
+                    roundup(full[args.param1].max())]
+    param2_lims = [rounddown(full[args.param2].min()), 
+                    roundup(full[args.param2].max())]
+    
+    print("param1_lims", param1_lims)
+    print("param2_lims", param2_lims)
     
     if args.param1 in as_zero_to_one:
         param1_lims = [0, 1]
@@ -110,35 +114,36 @@ if __name__ == "__main__":
     
     for axi, t in enumerate(weeks):
         
+        # Subset the dataset to the week in question
         subset = full[full.week == t]
         
         ax[axi].scatter(subset[args.param1], subset[args.param2], 
-            s = 3, lw = 0, c = colour)
+            s = 3, lw = 0, c = colour_dict_country[args.country]["crgba"])
+        
+        ax[axi].set_xlim(param1_lims)
+        ax[axi].set_ylim(param2_lims)
         
         if axi > 0:
             ax[axi].set_xticks([])
             ax[axi].set_xticklabels([])
             ax[axi].set_yticks([])
             ax[axi].set_yticklabels([])
+        else:
+            ax[axi].set_xticks(np.linspace(param1_lims[0], param1_lims[1], NTICKS))
+            ax[axi].set_yticks(np.linspace(param2_lims[0], param2_lims[1], NTICKS))
         
-        ax[axi].set_frame_on(False)
+        #ax[axi].set_frame_on(False)
+        # ax[axi].axhline(param1_lims[0], color = colour_line, linewidth = 3.0)
+        # ax[axi].axvline(param2_lims[0], color = colour_line, linewidth = 3.0)
+        
+        ax[axi].spines['top'].set_visible(False)
+        ax[axi].spines['right'].set_visible(False)
+        
         ax[axi].tick_params(labelsize = 8, length = 0.0)
-        
-        ax[axi].set_xlim(param1_lims)
-        ax[axi].set_ylim(param2_lims)
-        
-        ax[axi].axhline(ax[axi].get_ylim()[0], color = color_line, linewidth = 1.0)
-        ax[axi].axvline(ax[axi].get_xlim()[0], color = color_line, linewidth = 1.0)
         
         # Can plot week number using xlabel as follows:
         #ax[axi].set_xlabel('\n\n'+str(t), fontsize = 12)
-        
         ax[axi].text(0.5, -0.15, str(t), size = 12, ha = "center", transform = ax[axi].transAxes)
-    
-    # Use 3 ticks for both axes
-    NTICKS = 3
-    ax[0].set_xticks(np.linspace(param1_lims[0], param1_lims[1], NTICKS))
-    ax[0].set_yticks(np.linspace(param2_lims[0], param2_lims[1], NTICKS))
     
     if args.param1 in as_logged:
         ax[0].set_xlabel('log $\\' + args.param1 + '$', fontsize = 14)
@@ -149,8 +154,6 @@ if __name__ == "__main__":
         ax[0].set_ylabel('log $\\' + args.param2 + '$', fontsize = 14)
     else:
         ax[0].set_ylabel('$\\' + args.param2 + '$', fontsize = 14)
-    
-    text_props = {'size': 14, 'weight': 'normal'}
     
     plt.figtext(0.53, 0.02, 'Week since first confirmed case', \
         va = 'center', ha = 'center', **text_props)
