@@ -5,7 +5,7 @@ each intervention was optimal.
 
 Usage:
 
-python plot_three_panel_plot.py <country> [--filetype <filetype>] [--outfilename=<outfile>] [--randomseed=<seed>] [--weeks 1 2 3 ...] [--obj <objective>]
+python plot_three_panel_plot.py <country> [--filetype <filetype>] [--outfilename=<outfile>] [--randomseed=<seed>] [--weeks 1 2 3 ...]
 
 This script assumes the input data for UK is within the file
 "cleaned_temp_model_fit_sim_runs_reruns.csv" and the input data for Miyazaki in the file
@@ -36,11 +36,6 @@ Parameters
 
 --figh : height of the output figure
 
-The resultant figures need to be processed with ImageMagick in order to pass the test for PLOS
-Computational Biology.  Example usage of ImageMagick commands are the following (assuming F2.eps was output by Python and F2.tif is the resultant tif file).  
-
-/opt/ImageMagick/bin/convert -density 300 F2.eps -resize 2200 -depth 8 -compress lzw -flatten F2.tif
-
 
 W. Probert, 2015
 """
@@ -52,27 +47,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.ticker import ScalarFormatter
 
+from colours import *
 
-# Default plotting options used throughout
+# Turn off the pandas SettingWithCopyWarning.  
+pd.options.mode.chained_assignment = None
 
-alpha = 0.8
-color_dict = {"ip": {'chex':'#D3D3D3', 'crgba': [0.827,0.827,0.827, alpha]},
-    "ipdc": {'chex': '#363636', "crgba": [0.212, 0.212, 0.212, alpha]},
-    "ipdccp": {'chex': '#984ea3', "crgba": [152./255,78./255,163./255, alpha]},
-    "rc3_low": {'chex': '#b2df8a', "crgba": [0.698, 0.875, 0.541, alpha]},
-    'rc3_high': {'chex': '#33a02c', "crgba": [0.20, 0.627, 0.173, alpha]},
-    'rc10_low': {'chex': '#a6cee3', "crgba": [0.651, 0.808, 0.89, alpha]},
-    'rc10_high': {'chex': '#1f78b4', 'crgba': [0.122, 0.471, 0.706, alpha]},
-    "v3": {'chex': '#fb9a99', 'crgba': [0.984, 0.604, 0.60, alpha]},
-    "v10": {'chex': '#e31a1c', 'crgba': [0.89, 0.102, 0.11, alpha]}
-    }
-
-color_dict_hex = {"ip": '#D3D3D3', "ipdc": '#363636', "ipdccp": '#984ea3',
-    "rc3_low": '#b2df8a','rc3_high': '#33a02c', 'rc10_low': '#a6cee3',
-    'rc10_high': '#1f78b4', "v3": '#fb9a99', "v10": '#e31a1c'}
-
-
-color_line = '#2b2b2b'
 
 if __name__ == "__main__":
     
@@ -92,9 +71,6 @@ if __name__ == "__main__":
     
     parser.add_argument("--randomseed", type = int, 
         help = "Random seed for initialising bootstrap sampling", default = 100)
-    
-    parser.add_argument("--obj", type = str, 
-        help = "Variable used for a particular management objective", default = "total_culls")
     
     parser.add_argument("--sim_legend", type = bool, 
         help = "Should a legend be plotted for the simulation output", default = True)
@@ -119,7 +95,6 @@ if __name__ == "__main__":
     print("Generating plots for: ", args.country)
     print("Generating plots with filetype: ", args.filetype)
     print("Using a random seed of: ", args.randomseed)
-    print("Running for a management objective of: ", args.obj)
     print("Plotting a legend for the simulation output: ", args.sim_legend)
     print("args.weeks: ", args.weeks)
     
@@ -128,36 +103,29 @@ if __name__ == "__main__":
     weeks = np.asarray(args.weeks); T = len(args.weeks)
     
     # Functions for summarising simulation output and then generating rankings of interventions
+    # can use alternative functions - see commented code below.  
     functions = [np.mean] #lambda x: np.percentile(x, 95)], np.median,np.var,()]
     function_names = ['mean']#, 'median', 'var', 'q95']95 perc
     
-    variables = [args.obj]
+    variables = ["total_culls"]
+    vars_texts = ['Total culls (head)']
     
-    if args.obj == "total_culls":
-        vars_texts = ['Total culls (head)']
-    elif args.obs == "final_estimated_duration":
-        vars_texts = ['Outbreak duration (days)']
-    else:
-        print("Unknown objective")
+    # Import the data
+    full = pd.read_csv(join('.', 'data', 'simulation_output_' + args.country + '.csv'))
     
     # UK-specific parameters
     if args.country == "uk":
-        full = pd.read_csv(join('.', 'data', 'cleaned_temp_model_fit_sim_runs_reruns.csv'))
-        
         outbreak_start = pd.datetime(year = 2001, month = 2, day = 19)
         
-        ctrl_order = ['ip', 'ipdc', 'ipdccp', 'rc3_high', 'rc10_high', 'v3', 'v10']
-        ctrl_names = ['ip', 'ipdc', 'ipdccp', 'rc3', 'rc10', 'v3', 'v10']
+        ctrl_order = ['ip', 'ipdc', 'ipdccp', 'rc3', 'rc10', 'v3', 'v10']
+        ctrl_names = ctrl_order
     
     # Miyazaki-specific parameters
     elif args.country == "japan":
-        full = pd.read_csv(join('.', 'data', \
-            'cleaned_temp_model_fit_sim_runs_japan_Aug2016.csv'))
-        
         outbreak_start = pd.datetime(year = 2010, month = 4, day = 20)
         
-        ctrl_order = ['ip', 'ipdc', 'rc3_high', 'rc10_high', 'v3', 'v10']
-        ctrl_names = ['ip', 'ipdc', 'rc3', 'rc10', 'v3', 'v10']
+        ctrl_order = ['ip', 'ipdc', 'rc3', 'rc10', 'v3', 'v10']
+        ctrl_names = ctrl_order
     
     # Calculate number of interventions
     n = len(ctrl_order)
@@ -172,7 +140,7 @@ if __name__ == "__main__":
         for ip, par in enumerate(['final', 'current']):
             full_all = full.loc[(full.params_used == par) & (full.control.isin(ctrl_order))]
             
-            for iv, var in enumerate(['final_estimated_duration', 'total_culls']):
+            for iv, var in enumerate(['total_culls']):
                 
                 model_results = []
                 
@@ -185,6 +153,7 @@ if __name__ == "__main__":
                         print("Not the same number of controls in the data as expected")
                     
                     n_runs = sub.shape[0]/n_controls
+                    
                     shifts = (np.arange(n_controls)*n_runs).astype(int)
                     
                     sub = sub.reset_index()
@@ -198,8 +167,8 @@ if __name__ == "__main__":
                         # Add the starting row numbers.  
                         comparison_df = sub.iloc[row + shifts]
                         
-                        # Find the maximum.  
-                        imin = comparison_df[var].argmin()
+                        # Find the minimum
+                        imin = comparison_df[var].idxmin() # idxmin; argmin
                         
                         opt_df = comparison_df.loc[imin,:]
                         
@@ -216,7 +185,7 @@ if __name__ == "__main__":
                     
                     model_results.append(optimal)
                     
-                    if (w == 1) & (par == 'final') & (var == 'final_estimated_duration'):
+                    if (w == 1) & (par == 'final'):
                         counts_full = pd.DataFrame(counts)
                         counts_full = counts_full.reset_index()
                         counts_full.columns = ['control', 'counts']
@@ -293,14 +262,13 @@ if __name__ == "__main__":
             sub_long = sub_long.sort_values(by = ['date', 'control'], ascending = [1, 1])
             
             for ii, t in enumerate(weeks):
+                
                 # Axes of interest
                 ax_i = ii
                 
-                date = outbreak_start + pd.to_timedelta(t, unit = 'W')
-                
-                axes[0, ax_i].axhline(0, color = color_line, linewidth = 3.0)
-                axes[1, ax_i].axhline(0, color = color_line, linewidth = 3.0)
-                axes[2, ax_i].axhline(0, color = color_line, linewidth = 3.0)
+                axes[0, ax_i].axhline(0, color = colour_line, linewidth = 3.0)
+                axes[1, ax_i].axhline(0, color = colour_line, linewidth = 3.0)
+                axes[2, ax_i].axhline(0, color = colour_line, linewidth = 3.0)
                 
                 # At each point in time, do the following:
                 #   - plot the points of rankings
@@ -328,16 +296,18 @@ if __name__ == "__main__":
                 t_prev = t - 1; t_next = t + 1
                 t_ind_next = weeks_to_plot[ind_next]
                 
-                date_curr = outbreak_start + pd.to_timedelta(t, unit = 'W')
+                # Using np.float for conversion here cause of ongoing issue with pd.to_timedelta
+                # see here: https://github.com/pandas-dev/pandas/issues/8757
+                date_curr = outbreak_start + pd.to_timedelta(np.float(t), unit = 'W')
                 rank_curr = sub_long.loc[sub_long['date'] == date_curr]
                 
-                date_prev = outbreak_start + pd.to_timedelta(t_ind_prev, unit = 'W')
+                date_prev = outbreak_start + pd.to_timedelta(np.float(t_ind_prev), unit = 'W')
                 rank_prev = sub_long.loc[sub_long['date'] == date_prev]
                 
                 if t_ind_prev < 1:
                     rank_prev = rank_curr
                 
-                date_next = outbreak_start + pd.to_timedelta(t_ind_next, unit = 'W')
+                date_next = outbreak_start + pd.to_timedelta(np.float(t_ind_next), unit = 'W')
                 rank_next = sub_long.loc[sub_long['date'] == date_next]
                 
                 if t not in skip_weeks:
@@ -365,12 +335,12 @@ if __name__ == "__main__":
                         if t != 1:
                             axes[1,ax_i].plot([LHS_x[i_cc], CENTER_x[i_cc]], \
                                 [LHS_h[i_cc], CENTER_h[i_cc]], \
-                                color = color_dict[cc]['chex'], \
+                                color = colour_dict_controls[cc]['chex'], \
                                 linewidth = 0.5, alpha = 1.0)
                         
                         axes[1,ax_i].plot([CENTER_x[i_cc], RHS_x[i_cc]], \
                             [CENTER_h[i_cc], RHS_h[i_cc]], \
-                            color = color_dict[cc]['chex'], \
+                            color = colour_dict_controls[cc]['chex'], \
                             linewidth = 0.5, alpha = 1.0)
                 
                 if t not in skip_weeks:
@@ -379,9 +349,9 @@ if __name__ == "__main__":
                     
                     for i_cc, cc in enumerate(ctrl_order):
                         
-                        axes[1,ax_i].plot(-0.5+i_v, \
+                        axes[1,ax_i].plot(-0.5 + i_v, \
                             rank_curr.loc[rank_curr.control == cc].ranking.values,\
-                            label = cc.upper(), color = color_dict[cc]['chex'], \
+                            label = cc.upper(), color = colour_dict_controls[cc]['chex'], \
                             linewidth = 0.5, marker = 'o', ms = 6, \
                             markeredgewidth = 0.0, \
                             markeredgecolor = 'grey') 
@@ -418,8 +388,8 @@ if __name__ == "__main__":
                         showextrema = True, showmedians = True)
                     
                     for b, cc in zip(boxes['bodies'], ctrl_order):
-                        b.set_facecolor(color_dict[cc]['crgba'])
-                        b.set_edgecolor(color_dict[cc]['chex'])
+                        b.set_facecolor(colour_dict_controls[cc]['crgba'])
+                        b.set_edgecolor(colour_dict_controls[cc]['chex'])
                         b.set_linewidth(0.25)
                         b.set_alpha(0.8)
                     
@@ -442,7 +412,7 @@ if __name__ == "__main__":
                     cap.set_alpha(0.9)
                     
                     m = boxes['cmedians']
-                    m.set_color(color_line)
+                    m.set_color(colour_line)
                     m.set_alpha(1.0)
                     m.set_linewidth(2.0)
                     
@@ -504,7 +474,7 @@ if __name__ == "__main__":
                     c3 = (counts_full.params_used == params)
                     sub = counts_full.loc[c1&c2&c3]
                     
-                    sub['colors'] = sub.control.map(color_dict_hex)
+                    sub['colors'] = sub.control.map(colour_dict_controls_hex)
                     
                     sub['control'] = pd.Categorical(sub['control'], ctrl_order)
                     sub = sub.sort_values(by = 'control')
@@ -523,7 +493,7 @@ if __name__ == "__main__":
                     
                     left = (ctr - ctr_offset) + ctr_offset*2*i_v - width/2.
                     
-                    ba = axes[2, ax_i].bar(left = [left]*(n), \
+                    ba = axes[2, ax_i].bar([left]*(n), \
                         height = sub.counts/tot, bottom = bottoms, \
                         color = sub.colors, alpha = 0.7, \
                         width = width, linewidth = 0)
@@ -552,11 +522,11 @@ if __name__ == "__main__":
                 # don't put a line on the first or last panels.  
                 if (t > 0) & (t != weeks[-1]):
                     axes[0, ax_i].axvline(axes[0, ax_i].get_xlim()[1], \
-                        color = '#cccccc', linewidth = 1.0, ymin = 0.05) # 2.0 previously
+                        color = colour_faint_line, linewidth = 1.0, ymin = 0.05) # 2.0 previously
                     axes[1, ax_i].axvline(axes[1, ax_i].get_xlim()[1], \
-                        color = '#cccccc', linewidth = 1.0, ymin = 0.1) # 2.0 previously
+                        color = colour_faint_line, linewidth = 1.0, ymin = 0.1) # 2.0 previously
                     axes[2, ax_i].axvline(axes[2, ax_i].get_xlim()[1], \
-                        color = '#cccccc', linewidth = 1.0, ymin = 0.1) # 2.0 previously
+                        color = colour_faint_line, linewidth = 1.0, ymin = 0.1) # 2.0 previously
                 
                 # Tick labels on bottom axis
                 if t in skip_weeks:
@@ -588,8 +558,8 @@ if __name__ == "__main__":
             # Add custom legend to the final subplot
             handles = []
             for c, lab in zip(ctrl_order, ctrl_names):
-                patch = mpatches.Patch(color = color_dict[c]['chex'], \
-                    alpha = alpha, label = lab.upper())
+                patch = mpatches.Patch(color = colour_dict_controls[c]['chex'], \
+                    alpha = alpha_control, label = lab.upper())
                 handles.append(patch)
             
             plt.sca(axes[ax0, ax1])
@@ -629,16 +599,16 @@ if __name__ == "__main__":
             yticks[-1].set_markeredgewidth(0.0)
         
         axes[0, 0].axvline(axes[0, 0].get_xlim()[0], \
-            color = color_line, linewidth = 3.0)
+            color = colour_line, linewidth = 3.0)
         
         ax10_lim = axes[1, 0].get_xlim()[0]
-        axes[1,0].axvline(ax10_lim, color = color_line, linewidth = 3.0)
-        axes[2,0].axvline(0, color = color_line, linewidth = 3.0)
+        axes[1,0].axvline(ax10_lim, color = colour_line, linewidth = 3.0)
+        axes[2,0].axvline(0, color = colour_line, linewidth = 3.0)
         
         fig.subplots_adjust(left = 0.09, bottom = 0.14, \
             right = 0.985, top = 0.95, wspace=0.0, hspace=0.35)
         
-        fig.set_size_inches(args.figw, args.figh)#, 48/5.5, 30/5.5)
+        fig.set_size_inches(args.figw, args.figh)
         
         # Determine the output filename
         if args.outfilename is None:
