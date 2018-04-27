@@ -8,3 +8,7 @@ data/*.csv
 
 # Ignore scripts related to cleaning the data
 clean_*
+
+# Ignore .tif and .pdf files in graphics folder
+graphics/*.tif
+graphics/*.pdf
