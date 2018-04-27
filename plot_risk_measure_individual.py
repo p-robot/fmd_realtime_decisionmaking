@@ -4,12 +4,15 @@ average-sized farm, integrated across a range of distances.
 
 Usage 
 
+python plot_risk_measure_individual.py <country> [--filetype <filetype>] [--outfilename=<outfile>] [--randomseed=<seed>] [--weeks 1 2 3 ...]
 
 """
 
 import pandas as pd, numpy as np, argparse
 from os.path import join
 from matplotlib import pyplot as plt
+
+from colours import *
 
 
 def susceptibility(row, japan = False):
@@ -84,8 +87,6 @@ def K(Dsq, delta, omega):
 
 
 if __name__=="__main__":
-    # Alpha transparency for face colours of violin plots.  
-    alpha = 0.6
     
     # Process the input argument
     parser = argparse.ArgumentParser()
@@ -103,29 +104,27 @@ if __name__=="__main__":
     
     args = parser.parse_args()
     
+    colour = colour_dict_country[args.country]['chex']
+    
     # Load parameter and demography data
     if args.country == "japan":
         
-        infile_params = 'cleaned_params_japan_vaccine_standard16.7.20.csv'
-        
-        colour = "#e31a1c"
-        rgba = [0.89, 0.102, 0.11, alpha]
+        rgba = [0.89, 0.102, 0.11, alpha_country]
         
         weeks = np.asarray(args.weeks);
         times = (weeks - 1)*7 + 34
         
         ylims = np.arange(-6, 8, step = 2)
     else:
-        infile_params = 'cleaned_params_uk.csv'
         
-        colour = "#1f78b4"
-        rgba = [0.122, 0.471, 0.706, alpha]
+        rgba = [0.122, 0.471, 0.706, alpha_country]
         
         weeks = np.asarray(args.weeks);
         times = (weeks - 1)*7 + 26
         
         ylims = range(-2, 3)
     
+    infile_params = 'parameters_' + args.country + '.csv'
     df_params = pd.read_csv(join('.', 'data', infile_params))
     
     # List container to store risk measures for each week of interest
@@ -151,7 +150,7 @@ if __name__=="__main__":
         Dsq = np.linspace(0, 500, 100)
         
         for d in Dsq:
-            o = sub.gamma1 * suscept * transmiss * K(d, sub.delta, sub.omega)
+            o = sub.gamma_1 * suscept * transmiss * K(d, sub.delta, sub.omega)
             output.append(o.values)
         
         output = np.array(output).T
