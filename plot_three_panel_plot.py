@@ -5,7 +5,7 @@ each intervention was optimal.
 
 Usage:
 
-python plot_three_panel_plot.py <country> [--filetype <filetype>] [--outfilename=<outfile>] [--randomseed=<seed>] [--weeks 1 2 3 ...]
+python plot_three_panel_plot.py <country> [--filetype <filetype>] [--outfilename=<outfile>] [--weeks 1 2 3 ...]
 
 This script assumes the input data for UK is within the file
 "cleaned_temp_model_fit_sim_runs_reruns.csv" and the input data for Miyazaki in the file
@@ -19,9 +19,6 @@ Parameters
     
 --filetype : str (default .eps)
     Graphics filetype for the output figure, to be passed to matplotlib's pyplot.savefig() function
-
---randomseed : int  (default 100)
-    Random seed for the bootstrap test
 
 --outfilename : str
     Output filename (default filename concatenates other information)
@@ -65,10 +62,7 @@ if __name__ == "__main__":
     
     parser.add_argument("--outfilename", type = str, 
         help = "Output filename (excluding the filetype suffix)", default = None)
-    
-    parser.add_argument("--randomseed", type = int, 
-        help = "Random seed for initialising bootstrap sampling", default = 100)
-    
+        
     parser.add_argument("--sim_legend", type = bool, 
         help = "Should a legend be plotted for the simulation output", default = True)
     
@@ -91,11 +85,8 @@ if __name__ == "__main__":
     
     sys.stdout.write("Generating plots for: " + args.country + "\n")
     sys.stdout.write("Generating plots with filetype: " + args.filetype + "\n")
-    sys.stdout.write("Using a random seed of: " + str(args.randomseed) + "\n")
     sys.stdout.write("Plotting a legend for the simulation output: " + str(args.sim_legend) + "\n")
     sys.stdout.write("Plotting weeks: " + " ".join(str(x) for x in args.weeks)  + "\n")
-    
-    RUN_STOCH = True # Set to True for the first run through
     
     weeks = np.asarray(args.weeks); T = len(args.weeks)
     
@@ -109,6 +100,7 @@ if __name__ == "__main__":
     
     # Import the data
     full = pd.read_csv(join('.', 'data', 'simulation_output_' + args.country + '.csv'))
+    counts_full = pd.read_csv(join('.', 'data', 'counts_' + args.country + '.csv'))
     
     # UK-specific parameters
     if args.country == "uk":
@@ -126,78 +118,6 @@ if __name__ == "__main__":
     
     # Calculate number of interventions
     n = len(ctrl_order)
-    
-    #########
-    if RUN_STOCH:
-        
-        # Define the parameters for the bootstrapping
-        n_boot = 1000
-        np.random.seed(args.randomseed)
-        
-        for ip, par in enumerate(['final', 'current']):
-            full_all = full.loc[(full.params_used == par) & (full.control.isin(ctrl_order))]
-            
-            for iv, var in enumerate(['total_culls']):
-                
-                model_results = []
-                
-                for w in full_all.week.unique():
-                    optimal = []
-                    sub = full_all.loc[full_all.week == w]
-                    
-                    n_controls = len(sub.control.unique())
-                    if n_controls != n:
-                         sys.stdout.write("Not same number of controls in the data as expected\n")
-                    
-                    n_runs = sub.shape[0]/n_controls
-                    
-                    shifts = (np.arange(n_controls)*n_runs).astype(int)
-                    
-                    sub = sub.reset_index()
-                    sub = sub.sort_values(by = 'control')
-                    
-                    for i in range(n_boot):
-                        # Draw 5 random numbers (for each of the control actions)
-                        # between 0 and n_runs
-                        row = np.random.randint(n_runs, size = n_controls)
-                        
-                        # Add the starting row numbers.  
-                        comparison_df = sub.iloc[row + shifts]
-                        
-                        # Find the minimum
-                        imin = comparison_df[var].idxmin() # idxmin; argmin
-                        
-                        opt_df = comparison_df.loc[imin,:]
-                        
-                        if comparison_df.shape[0] != n:
-                            sys.stdout.write("Number of controls in the data not as expected")
-                        
-                        # there may be ties... so this may be a list
-                        if isinstance(opt_df.control, str):
-                            optimal.append(opt_df.control)
-                        else:
-                            optimal.extend(list(opt_df.control))
-                        
-                    counts = pd.Categorical(optimal, categories = ctrl_order).value_counts()
-                    
-                    model_results.append(optimal)
-                    
-                    if (w == 1) & (par == 'final'):
-                        counts_full = pd.DataFrame(counts)
-                        counts_full = counts_full.reset_index()
-                        counts_full.columns = ['control', 'counts']
-                        counts_full['week'] = w
-                        counts_full['objective'] = var
-                        counts_full['params_used'] = par
-                    else:
-                        counts = pd.DataFrame(counts)
-                        counts = counts.reset_index()
-                        counts.columns = ['control', 'counts']
-                        counts['week'] = w
-                        counts['objective'] = var
-                        counts['params_used'] = par
-                        
-                        counts_full = pd.concat([counts_full, counts])
     
     skip_weeks = [17, 18, 19, 21, 22, 23, 25, 26, 27]
     weeks_to_plot = np.setdiff1d(weeks, skip_weeks)
@@ -271,74 +191,10 @@ if __name__ == "__main__":
                 #   - plot the points of rankings
                 #   - find the previous index, and the next index (within times_to_..)
                 
-                if t not in skip_weeks:
-                    ind_prev = np.digitize([t], weeks_to_plot)[0] - 2
-                    ind_curr = np.digitize([t], weeks_to_plot)[0] - 1
-                    ind_next = np.digitize([t], weeks_to_plot)[0]
-                else:
-                    ind_prev = np.digitize([t], weeks_to_plot)[0] - 1
-                    ind_next = np.digitize([t], weeks_to_plot)[0]
-                    ind_curr = np.nan
-                
-                if ind_next == len(weeks_to_plot):
-                    ind_next = ind_curr
-                    
-                if ind_prev < 0:
-                    ind_prev = ind_curr
-                    t_ind_prev = 0
-                else:
-                    t_ind_prev = weeks_to_plot[ind_prev]
-                
-                # Find the previous time and next time
-                t_prev = t - 1; t_next = t + 1
-                t_ind_next = weeks_to_plot[ind_next]
-                
                 # Using np.float for conversion here cause of ongoing issue with pd.to_timedelta
                 # see here: https://github.com/pandas-dev/pandas/issues/8757
                 date_curr = outbreak_start + pd.to_timedelta(np.float(t), unit = 'W')
                 rank_curr = sub_long.loc[sub_long['date'] == date_curr]
-                
-                date_prev = outbreak_start + pd.to_timedelta(np.float(t_ind_prev), unit = 'W')
-                rank_prev = sub_long.loc[sub_long['date'] == date_prev]
-                
-                if t_ind_prev < 1:
-                    rank_prev = rank_curr
-                
-                date_next = outbreak_start + pd.to_timedelta(np.float(t_ind_next), unit = 'W')
-                rank_next = sub_long.loc[sub_long['date'] == date_next]
-                
-                if t not in skip_weeks:
-                    rise_lhs = rank_curr.ranking.values - rank_prev.ranking.values
-                    run = np.abs(t_ind_prev - t)
-                    slopes_lhs = rise_lhs/run
-                    heights_lhs = rank_prev
-                else:
-                    rise_lhs = rank_next.ranking.values - rank_prev.ranking.values
-                    run = np.abs(t_ind_prev - t_ind_next)
-                    slopes_lhs = rise_lhs/run
-                
-                LHS_x = [0.5 - np.abs(t_ind_prev - t)] * n
-                LHS_h = np.array(rank_prev.ranking)
-                
-                CENTER_x = [0.5] * n
-                CENTER_h = LHS_h + slopes_lhs*np.abs(t_ind_prev - t)
-                
-                RHS_x = [0.5 + np.abs(t_ind_next - t)] * n
-                RHS_h = np.array(rank_next.ranking)
-                
-                # Plotting of lines between the ranking circles.  
-                if False:
-                    for i_cc, cc in enumerate(ctrl_order):
-                        if t != 1:
-                            axes[1,ax_i].plot([LHS_x[i_cc], CENTER_x[i_cc]], \
-                                [LHS_h[i_cc], CENTER_h[i_cc]], \
-                                color = colour_dict_controls[cc]['chex'], \
-                                linewidth = 0.5, alpha = 1.0)
-                        
-                        axes[1,ax_i].plot([CENTER_x[i_cc], RHS_x[i_cc]], \
-                            [CENTER_h[i_cc], RHS_h[i_cc]], \
-                            color = colour_dict_controls[cc]['chex'], \
-                            linewidth = 0.5, alpha = 1.0)
                 
                 if t not in skip_weeks:
                     # Plot circles at each forward simulation point.  
@@ -381,37 +237,40 @@ if __name__ == "__main__":
                     pos = np.linspace(1, n, n) + i_v*n + i_v*gap
                     
                     boxes = axes[0, ax_i].violinplot(data, pos, \
-                        points = 20, widths = [0.7]*n, showmeans = True, \
+                        points = 50, widths = [0.7]*n, showmeans = True, \
                         showextrema = True, showmedians = True)
                     
                     for b, cc in zip(boxes['bodies'], ctrl_order):
                         b.set_facecolor(colour_dict_controls[cc]['crgba'])
                         b.set_edgecolor(colour_dict_controls[cc]['chex'])
-                        b.set_linewidth(0.25)
+                        b.set_linewidth(0.1)
                         b.set_alpha(0.8)
                     
-                    w = boxes['cmeans']
-                    w.set_color('grey')
-                    w.set_alpha(0.0)
-                    w.set_linestyle('-')
+                    means = boxes['cmeans']
+                    means.set_color(colour_line)
+                    means.set_alpha(1.0)
+                    means.set_linestyle('-')
+                    means.set_linewidth(2.0)
                     
-                    cap = boxes['cbars']
-                    b.set_linewidth(0.25)
-                    cap.set_color('grey')
-                    cap.set_alpha(0.9)
+                    bars = boxes['cbars']
+                    bars.set_linewidth(0.25)
+                    bars.set_color('grey')
+                    bars.set_alpha(0.9)
                     
-                    cap = boxes['cmaxes']
-                    cap.set_color('grey')
-                    cap.set_alpha(0.9)
+                    maxes = boxes['cmaxes']
+                    maxes.set_color('grey')
+                    maxes.set_alpha(0.9)
+                    maxes.set_linewidth(0.25)
                     
-                    cap = boxes['cmins']
-                    cap.set_color('grey')
-                    cap.set_alpha(0.9)
+                    mins = boxes['cmins']
+                    mins.set_color('grey')
+                    mins.set_alpha(0.9)
+                    mins.set_linewidth(0.25)
                     
-                    m = boxes['cmedians']
-                    m.set_color(colour_line)
-                    m.set_alpha(1.0)
-                    m.set_linewidth(2.0)
+                    medians = boxes['cmedians']
+                    medians.set_color('grey')
+                    medians.set_alpha(0.0)
+                    medians.set_linewidth(2.0)
                     
                 axes[0, ax_i].set_frame_on(False)
                 axes[0, ax_i].set_xticks([])
@@ -476,7 +335,7 @@ if __name__ == "__main__":
                     
                     cumsums = sub.counts.cumsum(skipna = True)/tot
                     bottoms = [0]
-                    to_add = list(cumsums[0:(n_controls - 1)])
+                    to_add = list(cumsums[0:(n - 1)])
                     bottoms.extend(to_add)
                     
                     # Calculate the left-hand-side anchor for stacked bars
@@ -515,11 +374,11 @@ if __name__ == "__main__":
                 # don't put a line on the first or last panels.  
                 if (t > 0) & (t != weeks[-1]):
                     axes[0, ax_i].axvline(axes[0, ax_i].get_xlim()[1], \
-                        color = colour_faint_line, linewidth = 1.0, ymin = 0.05) # 2.0 previously
+                        color = colour_faint_line, linewidth = 1.0, ymin = 0.05)
                     axes[1, ax_i].axvline(axes[1, ax_i].get_xlim()[1], \
-                        color = colour_faint_line, linewidth = 1.0, ymin = 0.1) # 2.0 previously
+                        color = colour_faint_line, linewidth = 1.0, ymin = 0.1)
                     axes[2, ax_i].axvline(axes[2, ax_i].get_xlim()[1], \
-                        color = colour_faint_line, linewidth = 1.0, ymin = 0.1) # 2.0 previously
+                        color = colour_faint_line, linewidth = 1.0, ymin = 0.1)
                 
                 # Tick labels on bottom axis
                 if t in skip_weeks:
