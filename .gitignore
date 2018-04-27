@@ -1,2 +1,10 @@
 .DS_Store
+
+# Ignore the csv files
 data/*.csv
+
+# Ignore python byte code
+*.pyc
+
+# Ignore scripts related to cleaning the data
+clean_*
