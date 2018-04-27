@@ -6,7 +6,8 @@ case) for both UK and Miyazaki outbreaks.  For each week the mean parameter valu
 and 97.5 percent quantiles are plotted for both countries.  Japan is plotted in red and UK is 
 plotted in blue.  
 
-Usage: plot_params_mean_95CI.py --filetype=<filetype> --weeks <weeks>
+Usage: 
+plot_params_mean_95CI.py --filetype=<filetype> --weeks <weeks>
 
 filetype : str
     File type for output figure, as passed to plt.savefig.  
@@ -14,6 +15,13 @@ filetype : str
 weeks : list of int
     Weeks of data to plot
 """
+
+import matplotlib
+
+# Set latex-related parameters for rending the axes titles (ignored if generating a png file)
+matplotlib.rcParams['text.usetex'] = True
+matplotlib.rcParams['font.family'] = 'serif'
+matplotlib.rcParams['font.serif'] = 'cm'
 
 import sys, os, argparse
 import pandas as pd, numpy as np, sys
@@ -78,12 +86,13 @@ if __name__ == "__main__":
     fig, axes = plt.subplots(ncols = args.ncols, nrows = args.nrows, frameon = False)
     fig.subplots_adjust(wspace = 0.3, hspace = 0.3)
     
+    sys.stdout.write("Plotting variable: ")
     for ivar, var in enumerate(columns_to_plot):
         
         axx = int(np.mod(ivar, args.ncols))
         axy = int(ivar // args.ncols)
         
-        sys.stdout.write("Plotting " + var)
+        sys.stdout.write(var + ", ")
         
         if var in fullj.columns:
             if var in as_logged:
@@ -153,6 +162,8 @@ if __name__ == "__main__":
             axes[axy, axx].yaxis.set_ticks_position('left')
             axes[axy, axx].xaxis.set_ticks_position('bottom')
             axes[axy, axx].tick_params(labelsize = 8, length = 0.0)
+    
+    sys.stdout.write("\n")
     
     plt.figtext(0.53, 0.03, 'Week since first confirmed case', \
         va = 'center', ha = 'center', **text_props)
