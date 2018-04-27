@@ -1,11 +1,6 @@
 # Script to generate figures for "Real-time decision-making during emergency disease outbreaks"
 # 
-# Script does the following:
-# 1. Creates figs 1-3, S3-S5, S9-S11 (figs S1, S2, S6, S7 are omitted due to data confidentiality).
-# 2. 
-# 
 # Data, downloaded as Supplementary Information, is assumed to be in the `data` folder.  
-# 
 # Run scripts from the main project folder, `fmd_realtime_decisionmaking`.  That is:
 # 
 # cd fmd_realtime_decisionmaking
@@ -90,12 +85,13 @@ python plot_scatterplot_params.py \
     -f=".png" \
     --outfilename="fig_s6"
 
+
 # # Figure s7 and s8
-# python2.7 ~/Projects/temporal_model_fitting/temporal_model_fitting/plot_map_county_occult_scatter.py \
+# python ~/Projects/temporal_model_fitting/temporal_model_fitting/plot_map_county_occult_scatter.py \
 #     --c=uk --f=.png --o=fig_s7
-#
-# python2.7 ~/Projects/temporal_model_fitting/temporal_model_fitting/plot_map_county_occult_scatter.py --c=japan --f=.png --o=fig_s8
-#
+
+
+# python ~/Projects/temporal_model_fitting/temporal_model_fitting/plot_map_county_occult_scatter.py --c=japan --f=.png --o=fig_s8
 
 
 # S9
