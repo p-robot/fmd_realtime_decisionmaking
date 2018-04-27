@@ -24,12 +24,17 @@ import matplotlib.patches as mpatches
 from colours import *
 
 # Functions to use for plotting
-functions = [np.mean, lambda x: x.quantile(0.025), lambda x: x.quantile(0.975)]
+def quant025(x):
+    return(x.quantile(0.025))
+
+def quant975(x):
+    return(x.quantile(0.975))
+
+functions = [np.mean, quant025, quant975]
 function_names = ['avg', 'L95', 'U95']
-funcs = dict(zip(function_names, functions))
 
 # Parameters to plot on the log scale
-as_logged = ['gamma1', 'epsilon1', 'epsilon2'] #'e1e2'
+as_logged = ['gamma_1', 'epsilon_1', 'epsilon_2']
 
 # Parameters to plot with 0 - 1 limits
 as_zero_to_one = ['phi_1', 'phi_2', 'psi_1', 'psi_2']
@@ -59,33 +64,26 @@ if __name__ == "__main__":
     fulluk = pd.read_csv(join('.', 'data', 'parameters_uk.csv'))
     fullj = pd.read_csv(join('.', 'data', 'parameters_japan.csv'))
     
-    fullj['e1e2'] = fullj.epsilon1 * fullj.epsilon2
-    fulluk['e1e2'] = fulluk.epsilon1 * fulluk.epsilon2
-    
     # 'Week 1' in the UK data started on the 19th Feb 2001
     # 'Week 1' in the Miyazaki data started on the 27th April 2010
     fullj['week'] = (fullj.day - 27)/7.
     fulluk['week'] = (fulluk.day - 19)/7.
     
     all_columns = np.union1d(fullj.columns, fulluk.columns)
-    columns_to_remove = ['meanI2N', 'meanOccI', 'omega', 'loglikelihood', 'b', \
-        'sample', 'day', 'week', 'rep', 'numInfecs', 'e1e2', 'bgIntegral', \
-        'integral', 'logProduct', 'theta']
-    
-    # 16 parameters to plot (not all in both datasets)
-    columns_to_keep = [x for x in all_columns if x not in columns_to_remove]
+    columns_to_plot = ['delta', 'epsilon_1', 'epsilon_2', 'gamma_1', 'gamma_2', 'phi_1', 'phi_2', \
+        'phi_3', 'psi_1', 'psi_2', 'psi_3', 'xi_2', 'xi_3', 'zeta_2', 'zeta_3']
     
     times = np.array(args.weeks)
     
     fig, axes = plt.subplots(ncols = args.ncols, nrows = args.nrows, frameon = False)
     fig.subplots_adjust(wspace = 0.3, hspace = 0.3)
     
-    for ivar, var in enumerate(columns_to_keep):
+    for ivar, var in enumerate(columns_to_plot):
         
         axx = int(np.mod(ivar, args.ncols))
         axy = int(ivar // args.ncols)
         
-        print("Plotting ", var)
+        sys.stdout.write("Plotting " + var)
         
         if var in fullj.columns:
             if var in as_logged:
@@ -102,8 +100,7 @@ if __name__ == "__main__":
         ymin = np.min([ukmin, jmin])
         ymax = np.max([ukmax, jmax])
         
-        # Calculate the mean
-        # Calculate the 2.5-th and 97.5-th quantile.  
+        # Calculate the mean, 2.5-th, and 97.5-th quantile.  
         
         for icountry, df in enumerate([fulluk, fullj]):
             if var in df.columns:
@@ -121,7 +118,10 @@ if __name__ == "__main__":
                 
                 subdf = df[df.week.isin(times)]
                 
-                grouper = subdf.groupby('week')[var].agg(funcs).reset_index()
+                grouper = subdf.groupby('week').agg({var: functions}).reset_index()
+                
+                grouper.columns = ['week'] + function_names
+                
                 axes[axy, axx].plot(grouper.week.values, grouper.avg.values, **linestyle_avg)
                 
                 axes[axy, axx].fill_between(grouper.week.values, 
