@@ -16,10 +16,8 @@ weeks : list of int
     Weeks of data to plot
 """
 
-import matplotlib
-
 # Set latex-related parameters for rending the axes titles (ignored if generating a png file)
-matplotlib.rcParams['text.usetex'] = True
+import matplotlib
 matplotlib.rcParams['font.family'] = 'serif'
 matplotlib.rcParams['font.serif'] = 'cm'
 
