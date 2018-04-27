@@ -34,7 +34,6 @@ python plot_three_panel_plot.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_2 \
-    --randomseed=100 \
     --weeks 1 2 3 4 5 28
 
 
@@ -44,7 +43,6 @@ python plot_three_panel_plot.py \
     --filetype=.png \
     --country=japan \
     --outfilename=fig_3 \
-    --randomseed=100 \
     --weeks 1 2 3 4 5 11
 
 
