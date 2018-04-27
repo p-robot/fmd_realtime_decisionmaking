@@ -100,9 +100,6 @@ if __name__ == "__main__":
     param2_lims = [rounddown(full[args.param2].min()), 
                     roundup(full[args.param2].max())]
     
-    print("param1_lims", param1_lims)
-    print("param2_lims", param2_lims)
-    
     if args.param1 in as_zero_to_one:
         param1_lims = [0, 1]
     if args.param2 in as_zero_to_one:
