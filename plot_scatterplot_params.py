@@ -42,7 +42,7 @@ def roundup(x, dp = 2):
     return np.ceil(x*(10**dp))/10**dp
 
 as_zero_to_one = ['phi_1', 'phi_2', 'psi_1', 'psi_2']
-as_logged = ['gamma1', 'epsilon1', 'epsilon2'] #'e1e2'
+as_logged = ['gamma_1', 'epsilon_1', 'epsilon_2']
 
 # Use 3 ticks for both axes
 NTICKS = 3
@@ -85,8 +85,6 @@ if __name__ == "__main__":
         
         # 'Week 1' in the Miyazaki data started on the 27th April 2010
         full['week'] = (full.day - 27)/7.
-    
-    full['e1e2'] = full.epsilon1 * full.epsilon2
     
     weeks = np.array(args.weeks)
     T = len(weeks)
