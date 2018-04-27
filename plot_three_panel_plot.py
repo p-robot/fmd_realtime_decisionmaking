@@ -23,9 +23,6 @@ Parameters
 --randomseed : int  (default 100)
     Random seed for the bootstrap test
 
---obj : str ("total_culls" (default) or "final_estimated_duration")
-    Objective to use and management metric to use for plotting
-
 --outfilename : str
     Output filename (default filename concatenates other information)
 
@@ -92,11 +89,11 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    print("Generating plots for: ", args.country)
-    print("Generating plots with filetype: ", args.filetype)
-    print("Using a random seed of: ", args.randomseed)
-    print("Plotting a legend for the simulation output: ", args.sim_legend)
-    print("args.weeks: ", args.weeks)
+    sys.stdout.write("Generating plots for: " + args.country + "\n")
+    sys.stdout.write("Generating plots with filetype: " + args.filetype + "\n")
+    sys.stdout.write("Using a random seed of: " + str(args.randomseed) + "\n")
+    sys.stdout.write("Plotting a legend for the simulation output: " + str(args.sim_legend) + "\n")
+    sys.stdout.write("Plotting weeks: " + " ".join(str(x) for x in args.weeks)  + "\n")
     
     RUN_STOCH = True # Set to True for the first run through
     
@@ -150,7 +147,7 @@ if __name__ == "__main__":
                     
                     n_controls = len(sub.control.unique())
                     if n_controls != n:
-                        print("Not the same number of controls in the data as expected")
+                         sys.stdout.write("Not same number of controls in the data as expected\n")
                     
                     n_runs = sub.shape[0]/n_controls
                     
@@ -173,7 +170,7 @@ if __name__ == "__main__":
                         opt_df = comparison_df.loc[imin,:]
                         
                         if comparison_df.shape[0] != n:
-                            print("Number of controls in the data not as expected")
+                            sys.stdout.write("Number of controls in the data not as expected")
                         
                         # there may be ties... so this may be a list
                         if isinstance(opt_df.control, str):
@@ -368,7 +365,7 @@ if __name__ == "__main__":
                 if t in skip_weeks:
                     pass
                 else:
-                    print ("week", t)
+                    sys.stdout.write("week " + str(t) + "\n")
                     
                     cond1 = (full.params_used == params)
                     cond2 = (full.week == t)
@@ -448,13 +445,9 @@ if __name__ == "__main__":
                 if args.country == "japan":
                     if (var == 'total_culls'):
                         limits = [0, full[var].max()*1.1]
-                    elif (var == "final_estimated_duration"):
-                        limits = [0, 500]
                 else:
                     if (var == 'total_culls'):
                         limits = [0, x.max() + 0.2*10E6]
-                    elif (var == "final_estimated_duration"):
-                        limits = [0, 1100]
                     limits = [0, full[var].max()]
                 
                 if (var == "total_culls"):
