@@ -1,14 +1,11 @@
 """
-Default colours
-
+Default colours and plotting parameters used throughout all figures.  
 """
-
 
 colour_line = '#2b2b2b'
 colour_faint_line = '#cccccc'
 
 text_props = {'size': 14, 'weight': 'normal'}
-
 
 alpha_country = 0.4
 
