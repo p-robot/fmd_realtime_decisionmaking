@@ -27,6 +27,11 @@ outfilename : str
     File name to use for output filetype
 """
 
+# Set latex-related parameters for rending the axes titles (ignored if generating a png file)
+import matplotlib
+matplotlib.rcParams['font.family'] = 'serif'
+matplotlib.rcParams['font.serif'] = 'cm'
+
 import sys, os, argparse
 from os.path import join
 import numpy as np, pandas as pd
