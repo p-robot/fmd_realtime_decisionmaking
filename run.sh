@@ -10,7 +10,7 @@
 
 # Clean/process the parameter data from raw data files
 #python clean_params_uk.py
-#python clean_params_japan.py
+#python clean_params_japan_hdf5.py
 
 # Clean/process the simulation data from raw data files
 #python clean_simulation_output_uk.py
