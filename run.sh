@@ -75,7 +75,7 @@ python plot_risk_measure_individual.py \
 # S5
 echo "Generating figure S5"
 python plot_scatterplot_params.py \
-    -p1=psi_1 -p2=gamma1 \
+    -p1=psi_1 -p2=gamma_1 \
     -w 1 2 3 4 5 6 \
     -c=uk \
     -f=".png"\
