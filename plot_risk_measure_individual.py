@@ -65,7 +65,7 @@ def transmissibility(row, japan = False):
     return v
 
 
-def K(Dsq, delta, omega):
+def K(Dsq, delta, omega = 1.3):
     """
     Evaluate the distance kernel function
     
@@ -131,13 +131,10 @@ if __name__=="__main__":
     risks = []
     
     # For each time step
-    for t in times:
+    for w in weeks:
     
         # Subset the dataset
-        if args.country == "japan":
-            sub = df_params[(df_params.day == t)]
-        else:
-            sub = df_params[(df_params.day == t) & (df_params.rep <= 2000)]
+        sub = df_params[(df_params.week == w)]
         
         # For each point in the posterior distribution (occults are disregarded)
         suscept = susceptibility(sub, (args.country == "japan"))
@@ -150,7 +147,7 @@ if __name__=="__main__":
         Dsq = np.linspace(0, 500, 100)
         
         for d in Dsq:
-            o = sub.gamma_1 * suscept * transmiss * K(d, sub.delta, sub.omega)
+            o = sub.gamma_1 * suscept * transmiss * K(d, sub.delta)
             output.append(o.values)
         
         output = np.array(output).T
