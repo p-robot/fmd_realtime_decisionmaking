@@ -98,7 +98,6 @@ python plot_three_panel_plot.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_s9 \
-    --randomseed=100 \
     --figw=14 \
     --figh=7 \
     --sim_legend=True \
@@ -113,7 +112,6 @@ python plot_three_panel_plot.py \
     --filetype=.png \
     --country=uk \
     --outfilename=fig_s10 \
-    --randomseed=100 \
     --figw=14 \
     --figh=7 \
     --sim_legend=True \
@@ -128,7 +126,6 @@ python plot_three_panel_plot.py \
     --filetype=.png \
     --country=japan \
     --outfilename=fig_s11 \
-    --randomseed=100 \
     --figw=14 \
     --figh=7 \
     --sim_legend=True \
