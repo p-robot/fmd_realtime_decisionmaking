@@ -148,7 +148,7 @@ if __name__ == "__main__":
             axes.append(axs)
         axes = np.array(axes)
         
-        for i_v, params in enumerate(['current', 'final']):
+        for i_v, params in enumerate(['accrued', 'final']):
             
             # Subset the data based on the type of parameters used
             # (this is used later for calculating limits of axes)
@@ -244,7 +244,7 @@ if __name__ == "__main__":
                         b.set_facecolor(colour_dict_controls[cc]['crgba'])
                         b.set_edgecolor(colour_dict_controls[cc]['chex'])
                         b.set_linewidth(0.1)
-                        b.set_alpha(0.8)
+                        b.set_alpha(alpha_control)
                     
                     means = boxes['cmeans']
                     means.set_color(colour_line)
@@ -322,9 +322,8 @@ if __name__ == "__main__":
                 else:
                     # Plot the stochastic output
                     c1 = (counts_full.week == t)
-                    c2 = (counts_full.objective == var)
-                    c3 = (counts_full.params_used == params)
-                    sub = counts_full.loc[c1&c2&c3]
+                    c2 = (counts_full.params_used == params)
+                    sub = counts_full.loc[c1&c2]
                     
                     sub['colors'] = sub.control.map(colour_dict_controls_hex)
                     
@@ -411,7 +410,7 @@ if __name__ == "__main__":
             handles = []
             for c, lab in zip(ctrl_order, ctrl_names):
                 patch = mpatches.Patch(color = colour_dict_controls[c]['chex'], \
-                    alpha = alpha_control, label = lab.upper())
+                    alpha = alpha_control, label = lab.upper(), edgecolor = None)
                 handles.append(patch)
             
             plt.sca(axes[ax0, ax1])
