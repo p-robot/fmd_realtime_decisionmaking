@@ -17,9 +17,9 @@ weeks : list of int
 """
 
 # Set latex-related parameters for rending the axes titles (ignored if generating a png file)
-import matplotlib
-matplotlib.rcParams['font.family'] = 'serif'
-matplotlib.rcParams['font.serif'] = 'cm'
+# import matplotlib
+# matplotlib.rcParams['font.family'] = 'serif'
+# matplotlib.rcParams['font.serif'] = 'cm'
 
 import sys, os, argparse
 import pandas as pd, numpy as np, sys
@@ -72,8 +72,8 @@ if __name__ == "__main__":
     
     # 'Week 1' in the UK data started on the 19th Feb 2001
     # 'Week 1' in the Miyazaki data started on the 27th April 2010
-    fullj['week'] = (fullj.day - 27)/7.
-    fulluk['week'] = (fulluk.day - 19)/7.
+    #fullj['week'] = (fullj.day - 27)/7.
+    #fulluk['week'] = (fulluk.day - 19)/7.
     
     all_columns = np.union1d(fullj.columns, fulluk.columns)
     columns_to_plot = ['delta', 'epsilon_1', 'epsilon_2', 'gamma_1', 'gamma_2', 'phi_1', 'phi_2', \
