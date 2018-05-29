@@ -27,10 +27,10 @@ outfilename : str
     File name to use for output filetype
 """
 
-# Set latex-related parameters for rending the axes titles (ignored if generating a png file)
-import matplotlib
-matplotlib.rcParams['font.family'] = 'serif'
-matplotlib.rcParams['font.serif'] = 'cm'
+# # Set latex-related parameters for rending the axes titles (ignored if generating a png file)
+# import matplotlib
+# matplotlib.rcParams['font.family'] = 'serif'
+# matplotlib.rcParams['font.serif'] = 'cm'
 
 import sys, os, argparse
 from os.path import join
@@ -82,14 +82,14 @@ if __name__ == "__main__":
         full = pd.read_csv(join('.', 'data', 'parameters_uk.csv'))
         
         # 'Week 1' in the UK data started on the 19th Feb 2001
-        full['week'] = (full.day - 19)/7.
+        #full['week'] = (full.day - 19)/7.
         
     elif args.country == "japan":
         
         full = pd.read_csv(join('.', 'data', 'parameters_japan.csv'))
         
         # 'Week 1' in the Miyazaki data started on the 27th April 2010
-        full['week'] = (full.day - 27)/7.
+        #full['week'] = (full.day - 27)/7.
     
     weeks = np.array(args.weeks)
     T = len(weeks)
