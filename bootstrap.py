@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # Import the dataset
     full = pd.read_csv(join('.', 'data', 'simulation_output_' + args.country + '.csv'))
     
-    for ip, par in enumerate(['final', 'current']):
+    for ip, par in enumerate(['final', 'accrued']):
         sys.stdout.write("Generating boostrap samples from " + par + " parameters\n")
         
         # Subset the dataset to the parameter set and control 
@@ -110,4 +110,6 @@ if __name__ == "__main__":
                     
                     counts_full = pd.concat([counts_full, counts])
     
-    counts_full.to_csv(join('.', 'data', 'counts_' + args.country + '.csv'), index = False)
+    cols2keep = ['week', 'params_used', 'control', 'counts']
+    counts_full[cols2keep].to_csv(join('.', 'data', 'counts_' + args.country + '.csv'), 
+        index = False)
