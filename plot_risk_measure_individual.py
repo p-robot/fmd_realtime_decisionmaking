@@ -205,9 +205,12 @@ if __name__=="__main__":
     ax.set_yticks(ylims)
     ax.set_yticklabels(ylims)
     
-    # Adjust figure size
-    fig.set_size_inches(9, 5)
+    # Adjust figure size (w, h)
+    fig.set_size_inches(7, 4)
     
+    # Trim the edges of the plot
+    fig.subplots_adjust(left = 0.1, bottom = 0.15, \
+        right = 0.95, top = 0.95, wspace = 0.0, hspace = 0.0)
     # Save figure and close figure object
-    plt.savefig(join('.', 'graphics', args.outfilename + args.filetype))
+    plt.savefig(join('.', 'graphics', args.outfilename + args.filetype), dpi = 300)
     plt.close()
