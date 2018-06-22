@@ -18,7 +18,7 @@ fmd_realtime_decisionmaking/
 
 ### Generating figures
 
-Figures were generated using Python (version 3.6.3) and the following packages: `numpy` (version 1.14.2), `pandas` (version 0.22.0), `matplotlib` (version 2.2.2).  Figures can be generated in `.png` format by running the script [`run.sh`](run.sh) from the main project folder.  
+Figures were generated using Python (version 3.6.3) and the following packages: `numpy` (version 1.14.2), `pandas` (version 0.22.0), `matplotlib` (version 2.2.2).  Figures can be generated in `.png` format by running the script [`run.sh`](run.sh) from the main project folder or using the commands listed by individual figures below.  
 
 
 ### Notes
