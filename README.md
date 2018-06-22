@@ -2,7 +2,7 @@
 
 Code to reproduce figures from Probert et al. (2018) Real-time decision-making during emergency disease outbreaks.  *PLOS Computational Biology*.  
 
-## Data set-up
+### Data set-up
 
 All parameter estimate data and simulation output are available via the Dryad Digital Repository with DOI of [doi:10.5061/dryad.gr656gk](https://doi.org/10.5061/dryad.gr656gk).  After download, data should be arranged in the following manner:
 ```
@@ -16,12 +16,12 @@ fmd_realtime_decisionmaking/
         /simulations_uk.csv
 ```
 
-## Generating figures
+### Generating figures
 
 Figures were generated using Python (version 3.6.3) and the following packages: `numpy` (version 1.14.2), `pandas` (version 0.22.0), `matplotlib` (version 2.2.2).  Figures can be generated in `.png` format by running the script [`run.sh`](run.sh) from the main project folder.  
 
 
-## Notes
+### Notes
 
 Excluded from the data repository are code for figures that depend upon confidential data (figures S1, S2, S7 and S8). All data for figures S2 and S8 is available if researchers follow the access details we have provided for the Miyazaki data (see the manuscript for details). Figures S1 and S7, however, rely on the outbreak data for the UK outbreak in 2001. Data on the 2001 UK FMD outbreak are available on request from the Department for Environment, Food, and Rural Affairs (DEFRA) of the government of the United Kingdom. Access to this data, including appropriate DEFRA contact information, is accessed through the [DEFRA website](https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs).  
 
