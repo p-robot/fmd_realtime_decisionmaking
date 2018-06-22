@@ -364,6 +364,7 @@ if __name__ == "__main__":
                         width = width, linewidth = 0, align = 'edge')
                 
                 axes[2, ax_i].xaxis.set_ticks_position('bottom')
+                axes[2, ax_i].xaxis.set_tick_params(width = 0.0)
                 axes[2, ax_i].yaxis.set_ticks_position('left')
                 axes[2, ax_i].set_yticklabels([])
                 axes[2, ax_i].set_yticks([])
