@@ -82,7 +82,7 @@ if __name__ == "__main__":
     times = np.array(args.weeks)
     
     fig, axes = plt.subplots(ncols = args.ncols, nrows = args.nrows, frameon = False)
-    fig.subplots_adjust(wspace = 0.3, hspace = 0.3)
+    fig.subplots_adjust(wspace = 0.3, hspace = 0.3, bottom = 0.1, top = 0.9, left = 0.05, right = 0.95)
     
     sys.stdout.write("Plotting variable: ")
     for ivar, var in enumerate(columns_to_plot):
