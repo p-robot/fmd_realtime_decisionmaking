@@ -1,4 +1,5 @@
 .DS_Store
+*.zip
 
 # Ignore the csv files
 data/*.csv
