@@ -67,7 +67,7 @@ if __name__ == "__main__":
         help = "Should a legend be plotted for the simulation output", default = True)
     
     parser.add_argument("--legend_size", type = int, 
-        help = "Size of the legend", default = 9)
+        help = "Size of the legend", default = 8)
     
     parser.add_argument("--accrued_xtext", type = str, 
         help = "Text on x-axis to denote columns of accrued information", default = "Accr.")
@@ -75,10 +75,10 @@ if __name__ == "__main__":
     parser.add_argument("--complete_xtext", type = str, 
         help = "Text on x-axis to denote columns of complete information", default = "Comp.")
     
-    parser.add_argument('--figw', type = float, default = 48/5.5, 
+    parser.add_argument('--figw', type = float, default = 7.5, #48/5.5
         help = "Figure output width")
     
-    parser.add_argument('--figh', type = float, default = 30/5.5, 
+    parser.add_argument('--figh', type = float, default = 4.7, #30/5.5
         help = "Figure output height")
     
     args = parser.parse_args()
@@ -183,9 +183,9 @@ if __name__ == "__main__":
                 # Axes of interest
                 ax_i = ii
                 
-                axes[0, ax_i].axhline(0, color = colour_line, linewidth = 3.0)
-                axes[1, ax_i].axhline(0, color = colour_line, linewidth = 3.0)
-                axes[2, ax_i].axhline(0, color = colour_line, linewidth = 3.0)
+                #axes[0, ax_i].axhline(0, color = colour_line, linewidth = 1.0)
+                #axes[1, ax_i].axhline(0, color = colour_line, linewidth = 1.0)
+                #axes[2, ax_i].axhline(0, color = colour_line, linewidth = 1.0)
                 
                 # At each point in time, do the following:
                 #   - plot the points of rankings
@@ -205,18 +205,23 @@ if __name__ == "__main__":
                         axes[1,ax_i].plot(-0.5 + i_v, \
                             rank_curr.loc[rank_curr.control == cc].ranking.values,\
                             label = cc.upper(), color = colour_dict_controls[cc]['chex'], \
-                            linewidth = 0.5, marker = 'o', ms = 6, \
+                            linewidth = 0.5, marker = 'o', ms = 5, \
                             markeredgewidth = 0.0, \
                             markeredgecolor = 'grey') 
                 
                 axes[1,ax_i].set_xlim([-1, 1])
                 axes[1,ax_i].set_ylim([0, n + 1])
                 
-                axes[1, ax_i].set_frame_on(False)
+                #axes[1, ax_i].set_frame_on(False)
                 axes[1, ax_i].xaxis.set_ticks_position('bottom')
                 axes[1, ax_i].yaxis.set_ticks_position('left')
                 axes[1, ax_i].set_xticks([])
                 axes[1, ax_i].set_xticklabels([])
+                axes[1, ax_i].set_yticks([])
+                axes[1, ax_i].set_yticklabels([])
+                axes[1, ax_i].spines['top'].set_visible(False)
+                axes[1, ax_i].spines['right'].set_visible(False)
+                axes[1, ax_i].spines['left'].set_visible(False)
                 
                 if t in skip_weeks:
                     pass
@@ -271,43 +276,52 @@ if __name__ == "__main__":
                     medians.set_color('grey')
                     medians.set_alpha(0.0)
                     medians.set_linewidth(2.0)
-                    
-                axes[0, ax_i].set_frame_on(False)
+                
                 axes[0, ax_i].set_xticks([])
                 axes[0, ax_i].set_xticklabels([])
+                axes[0, ax_i].spines['top'].set_visible(False)
+                axes[0, ax_i].spines['right'].set_visible(False)
+                axes[0, ax_i].spines['left'].set_visible(False)
+                
+                axes[1, ax_i].spines['top'].set_visible(False)
+                axes[1, ax_i].spines['right'].set_visible(False)
+                axes[1, ax_i].spines['left'].set_visible(False)
                 
                 for mid_ax in np.arange(T, T):
-                    axes[0, mid_ax].set_frame_on(False)
                     axes[0, mid_ax].set_xticks([])
                     axes[0, mid_ax].set_xticklabels([])
-                    axes[0, mid_ax].set_yticks([])
-                    axes[0, mid_ax].set_yticklabels([])
+                    axes[0, mid_ax].spines['top'].set_visible(False)
+                    axes[0, mid_ax].spines['right'].set_visible(False)
+                    axes[0, mid_ax].spines['left'].set_visible(False)
                     
-                    axes[1, mid_ax].set_frame_on(False)
                     axes[1, mid_ax].set_xticks([])
                     axes[1, mid_ax].set_xticklabels([])
                     axes[1, mid_ax].set_yticks([])
                     axes[1, mid_ax].set_yticklabels([])
+                    axes[1, mid_ax].spines['top'].set_visible(False)
+                    axes[1, mid_ax].spines['right'].set_visible(False)
+                    axes[1, mid_ax].spines['left'].set_visible(False)
                     
                 if (ax_i == 0):
                     axes[0, ax_i].yaxis.set_ticks_position('left')
                     axes[1, ax_i].yaxis.set_ticks_position('left')
+                    
                     for tick in axes[i_v, 0].yaxis.get_major_ticks():
-                        tick.label.set_fontsize(10) # 24
+                        tick.label.set_fontsize(8)
                 else:
-                    axes[0, ax_i].yaxis.set_visible(False)
-                    axes[1, ax_i].yaxis.set_visible(False)
+                    axes[0, ax_i].set_yticks([])
+                    axes[0, ax_i].set_yticklabels([])
                 
                 xlim = [-1, 2*n+gap+2]
                 axes[0, ax_i].set_xlim(xlim)
                 
                 if args.country == "japan":
                     if (var == 'total_culls'):
-                        limits = [0, full[var].max()*1.1]
+                        limits = [0, full[var].max()*1.2]
                 else:
                     if (var == 'total_culls'):
                         limits = [0, x.max() + 0.2*10E6]
-                    limits = [0, full[var].max()]
+                    limits = [-100, full[var].max()]
                 
                 if (var == "total_culls"):
                     formatter = ScalarFormatter()
@@ -347,14 +361,17 @@ if __name__ == "__main__":
                     ba = axes[2, ax_i].bar([left]*(n), \
                         height = sub.counts/tot, bottom = bottoms, \
                         color = sub.colors, alpha = 0.7, \
-                        width = width, linewidth = 0)
+                        width = width, linewidth = 0, align = 'edge')
                 
-                axes[2, ax_i].set_frame_on(False)
                 axes[2, ax_i].xaxis.set_ticks_position('bottom')
                 axes[2, ax_i].yaxis.set_ticks_position('left')
                 axes[2, ax_i].set_yticklabels([])
                 axes[2, ax_i].set_yticks([])
-                axes[2,ax_i].set_xlim([0, 2])
+                axes[2, ax_i].set_xlim([0, 2])
+                axes[2, ax_i].set_ylim([0.0, 1.0])
+                axes[2, ax_i].spines['top'].set_visible(False)
+                axes[2, ax_i].spines['right'].set_visible(False)
+                axes[2, ax_i].spines['left'].set_visible(False)
                 
                 # PLOTTING THE 'A' and 'C' for accrued and complete
                 axes[2, ax_i].set_xticks([ctr - ctr_offset, ctr + ctr_offset])
@@ -367,7 +384,7 @@ if __name__ == "__main__":
                     axes[2, ax_i].set_xticklabels([args.accrued_xtext, args.complete_xtext])
             
                 for tick in axes[2, ax_i].xaxis.get_major_ticks():
-                    tick.label.set_fontsize(8) # 26
+                    tick.label.set_fontsize(8)
             
                 # Add horizontal lines to designate changes in time step
                 # don't put a line on the first or last panels.  
@@ -383,24 +400,24 @@ if __name__ == "__main__":
                 if t in skip_weeks:
                     axes[2, ax_i].set_xlabel("")
                 else:
-                    axes[2, ax_i].set_xlabel(str(t), size = 12, weight = 'bold')
+                    axes[2, ax_i].set_xlabel(str(t), size = 11, weight = 'bold')
             
-            # Set the ticks and labels on the ranking plots
-            axes[1,0].set_yticks(np.arange(n) + 1)
-            axes[1,0].set_yticklabels(np.flipud(np.arange(n) + 1))
-            
-            for tick in axes[1,0].yaxis.get_major_ticks():
-                tick.label.set_fontsize(8)
-            
-            # Set the ticks and labels on the stochastic analysis plots
-            axes[2,0].set_yticks(np.linspace(0, 1, 2))
-            axes[2,0].set_yticklabels(np.linspace(0, 1, 2))
-            
-            for tick in axes[2,0].yaxis.get_major_ticks():
-                tick.label.set_fontsize(8)
-                
             # Turn off the ticks on the right hand side of the plot
             axes[i_v, i_v].yaxis.set_ticks_position('left')
+        
+        # Set the ticks and labels on the ranking plots
+        axes[1,0].set_yticks([1, n])
+        axes[1,0].set_yticklabels([n, 1])
+        
+        for tick in axes[1,0].yaxis.get_major_ticks():
+            tick.label.set_fontsize(8)
+        
+        # Set the ticks and labels on the stochastic analysis plots
+        axes[2,0].set_yticks(np.linspace(0, 1, 2))
+        axes[2,0].set_yticklabels(np.linspace(0, 1, 2))
+        
+        for tick in axes[2,0].yaxis.get_major_ticks():
+            tick.label.set_fontsize(8)
         
         if args.sim_legend:
             ax0 = 0
@@ -420,11 +437,11 @@ if __name__ == "__main__":
             axes[ax0, ax1].add_artist(legend_all)
         
         # Add subplot labels to the figure
-        line_props = {'fontsize': 18, 'weight': 'bold'} # 36
+        line_props = {'fontsize': 16, 'weight': 'bold'} # 36
         
         plt.figtext(0.01, 0.94, 'A', **line_props)
-        plt.figtext(0.01, 0.44, 'B', **line_props)
-        plt.figtext(0.01, 0.24, 'C', **line_props)
+        plt.figtext(0.01, 0.46, 'B', **line_props)
+        plt.figtext(0.01, 0.29, 'C', **line_props)
         
         # Add figure text for the simulation parameters
         label_props = {'size': 12, 'weight': 'bold', 'va': 'center', 'ha': 'center'}
@@ -433,31 +450,32 @@ if __name__ == "__main__":
         vertical_props = {'rotation': 90, 'va': 'center', 'ha': 'center'}
         
         # Add main label to the y-axis on the RHS
-        plt.figtext(0.047, 0.7, ylabel, size = 10, weight = 'bold', **vertical_props)
-        plt.figtext(0.047, 0.38, "Ranking", size = 9, weight = 'bold', **vertical_props)
+        if T > 6:
+            yaxislabelsize = 12
+        else: 
+            yaxislabelsize = 8
         
-        plt.figtext(0.049, 0.21, "Prop. times", size = 8, **vertical_props)
-        plt.figtext(0.06, 0.21, "optimal", size = 8, **vertical_props)
+        plt.figtext(0.047, 0.7, ylabel, size = yaxislabelsize, **vertical_props)
+        plt.figtext(0.047, 0.4, "Ranking", size = yaxislabelsize, **vertical_props)
+        
+        plt.figtext(0.04, 0.23, "Prop. times", size = yaxislabelsize, **vertical_props)
+        plt.figtext(0.055, 0.23, "optimal", size = yaxislabelsize, **vertical_props)
         
         y_label = "Weeks since first confirmed case"
-        plt.figtext(0.5, 0.03, y_label, weight = 'bold', \
-            va = 'center', ha = 'center', size = 14)
+        plt.figtext(0.55, 0.03, y_label, \
+            va = 'center', ha = 'center', size = 12)
         
-        # Turn off the tick marks for the bottom tick in the top two panels
-        for ax in [0,1]:
-            yticks = axes[ax,0].yaxis.get_ticklines()
-            yticks[0].set_markeredgewidth(0.0)
-            yticks[-1].set_markeredgewidth(0.0)
+        axes[0, 0].spines['left'].set_visible(True)
+        if args.country == "japan":
+            axes[0, 0].set_yticks(np.arange(0.0, 1.6, 0.2)*10E5)
+            #axes[0, 0].set_yticklabels(np.arange(0.0, 1.6, 0.2))
+            axes[0, 0].set_ylim(limits)
         
-        axes[0, 0].axvline(axes[0, 0].get_xlim()[0], \
-            color = colour_line, linewidth = 3.0)
+        axes[1, 0].spines['left'].set_visible(True)
+        axes[2, 0].spines['left'].set_visible(True)
         
-        ax10_lim = axes[1, 0].get_xlim()[0]
-        axes[1,0].axvline(ax10_lim, color = colour_line, linewidth = 3.0)
-        axes[2,0].axvline(0, color = colour_line, linewidth = 3.0)
-        
-        fig.subplots_adjust(left = 0.09, bottom = 0.14, \
-            right = 0.985, top = 0.95, wspace=0.0, hspace=0.35)
+        fig.subplots_adjust(left = 0.10, bottom = 0.16, \
+            right = 0.985, top = 0.95, wspace = 0.0, hspace = 0.35)
         
         fig.set_size_inches(args.figw, args.figh)
         

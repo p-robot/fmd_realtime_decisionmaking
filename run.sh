@@ -16,6 +16,7 @@
 #python clean_simulation_output_uk.py
 #python clean_simulation_output_japan.py
 
+alias python=python3
 
 # Generate figures
 
