@@ -450,11 +450,16 @@ if __name__ == "__main__":
         vertical_props = {'rotation': 90, 'va': 'center', 'ha': 'center'}
         
         # Add main label to the y-axis on the RHS
-        plt.figtext(0.047, 0.7, ylabel, size = 8, **vertical_props)
-        plt.figtext(0.047, 0.4, "Ranking", size = 8, **vertical_props)
+        if T > 6:
+            yaxislabelsize = 12
+        else: 
+            yaxislabelsize = 8
         
-        plt.figtext(0.04, 0.23, "Prop. times", size = 8, **vertical_props)
-        plt.figtext(0.055, 0.23, "optimal", size = 8, **vertical_props)
+        plt.figtext(0.047, 0.7, ylabel, size = yaxislabelsize, **vertical_props)
+        plt.figtext(0.047, 0.4, "Ranking", size = yaxislabelsize, **vertical_props)
+        
+        plt.figtext(0.04, 0.23, "Prop. times", size = yaxislabelsize, **vertical_props)
+        plt.figtext(0.055, 0.23, "optimal", size = yaxislabelsize, **vertical_props)
         
         y_label = "Weeks since first confirmed case"
         plt.figtext(0.55, 0.03, y_label, \
